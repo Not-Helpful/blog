@@ -1185,6 +1185,10 @@
         </section>
 
 
+
+
+
+
         <section>
           <h2>Paths</h2>
           <ul>
@@ -1980,446 +1984,446 @@
                       color:#ddd;
                       margin-right:auto;
                       ">
-            -- "Give me everything about the user with this email"
-            SELECT * FROM users WHERE email = &apos;alice@example.com&apos;
-          </pre>
-        </section>
+                      -- "Give me everything about the user with this email"
+                                                                            SELECT * FROM users WHERE email = &apos;alice@example.com&apos;
+                                                                            </pre>
+</section>
 
-        <section>
-          <h2>Data</h2>
+<section>
+  <h2>Data</h2>
 
-          <ul>
-            <li>Data is stored as rows and columns</li>
-            <li>Row: Data Entry</li>
-            <li>Column: Element of that Entry</li>
-          </ul>
+  <ul>
+    <li>Data is stored as rows and columns</li>
+    <li>Row: Data Entry</li>
+    <li>Column: Element of that Entry</li>
+  </ul>
 
-          <pre class="fragment"
-               style="
-                      font-size: clamp(20px, 1.5vw, 40px);
-                      display:block;
-                      width:100%;
-                      text-align:left;
-                      margin-left:0;
-                      color:#ddd;
-                      margin-right:auto;
-                      ">
-            email              name        age     role
-            alice@example.com  Alice       21      student
-            bob@example.com    Bob         24      TA
-            carol@example.com  Carol       19      student
-          </pre>
-        </section>
-
-
-        <section>
-          <h2>SQL</h2>
-          <ul>
-            <li>SQL is a "Query" language</li>
-            <li class="fragment">Sentences in SQL "Query" the database for information</li>
-          </ul>
-          <pre class="fragment"
-               style="
-                      font-size: clamp(20px, 1.5vw, 40px);
-                      display:block;
-                      width:100%;
-                      text-align:left;
-                      margin-left:0;
-                      color:#ddd;
-                      background:#111
-                      margin-right:auto;
-                      ">
-            -- "Give me everything about the user with this email"
-            SELECT * FROM users WHERE email = &apos;alice@example.com&apos;
-          </pre>
-          <p></p>
-        </section>
+  <pre class="fragment"
+       style="
+              font-size: clamp(20px, 1.5vw, 40px);
+              display:block;
+              width:100%;
+              text-align:left;
+              margin-left:0;
+              color:#ddd;
+              margin-right:auto;
+              ">
+    email              name        age     role
+    alice@example.com  Alice       21      student
+    bob@example.com    Bob         24      TA
+    carol@example.com  Carol       19      student
+  </pre>
+</section>
 
 
-        <section>
-          <h2>Logging in</h2>
-          <ul>
-            <li>Facebook needs to check your username and password</li>
-          </ul>
-          <pre class="fragment"
-               style="
-                      font-size: clamp(20px, 1.5vw, 40px);
-                      display:block;
-                      width:100%;
-                      text-align:left;
-                      margin-left:0;
-                      color:#ddd;
-                      background:#111
-                      margin-right:auto;
-                      ">
-            SELECT * FROM users
-            WHERE email    = &apos;alice@example.com&apos;
-            AND   password = &apos;hunter2&apos;
-          </pre>
-          <ul>
-            <li class="fragment">If the query returns a row → logged in</li>
-            <li class="fragment">If no rows returned → access denied</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>Logging in</h2>
-          <ul>
-            <li>Facebook takes YOUR input, and checks the Database</li>
-            <li>Normal email: &nbsp;<code>alice@example.com</code></li>
-            <li class="fragment">Malicious email: &nbsp;<code>alice&apos; OR 1=1--</code></li>
-          </ul>
-          <pre class="fragment"
-               style="
-                      font-size: clamp(20px, 1.5vw, 40px);
-                      display:block;
-                      width:100%;
-                      text-align:left;
-                      margin-left:0;
-                      color:#ddd;
-                      background:#111
-                      margin-right:auto;
-                      ">
-            -- What the server builds:
-            SELECT * FROM users
-            WHERE email    = &apos;alice&apos; OR 1=1--&apos;
-            AND   password = &apos;anything&apos;
-          </pre>
-          <ul>
-            <li class="fragment">The <strong>&apos;</strong> closes the email string early</li>
-            <li class="fragment"><strong>OR 1=1</strong> is always true — the WHERE clause always passes</li>
-            <li class="fragment"><strong>--</strong> is a SQL comment — it deletes the rest of the query</li>
-          </ul>
-        </section>
-
-        <section>
-          <p style="font-size:0.75em; color:#aaa;">Type in the email field and watch the SQL query change:</p>
-          <input id="sqli-email" type="text" value="alice@example.com"
-                 style="width:80%; padding:8px; font-size:0.85em; background:#222; color:#ddd; border:1px solid #555;"
-                 oninput="updateQuery()"
-                 />
-          <pre id="sqli-query" style="font-size:0.8em; background:#111; padding:15px; color:#ddd; margin-top:16px; white-space:pre-wrap;"></pre>
-          <div id="sqli-result" style="margin-top:10px; font-size:0.85em; padding:10px; border-radius:5px;"></div>
-
-          <script>
-            function updateQuery() {
-                const email = document.getElementById('sqli-email').value;
-                const el = document.getElementById('sqli-query');
-                const res = document.getElementById('sqli-result');
-
-                const safe = email.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-                el.innerHTML = `SELECT * FROM users\nWHERE email = '<span style="color:#ff9944">${safe}</span>'\nAND   password = 'hunter2'`;
-
-                const isInjected = email.includes("'") || email.includes('--') || email.toLowerCase().includes('or');
-                if (isInjected) {
-                    res.style.background = '#2a0000';
-                    res.style.color = '#ff6666';
-                    res.style.border = '1px solid #880000';
-                    res.textContent = '⚠️ Input contains SQL characters — the query structure may be broken';
-                } else {
-                    res.style.background = '#002a00';
-                    res.style.color = '#66ff66';
-                    res.style.border = '1px solid #008800';
-                    res.textContent = '✅ Clean input — query is safe';
-                }
-
-                // sync to next slide
-                const injected = document.getElementById('sqli-result-2');
-                const query2 = document.getElementById('sqli-query-2');
-                if (injected && query2) {
-                    query2.innerHTML = el.innerHTML;
-                    injected.style.background = res.style.background;
-                    injected.style.color = res.style.color;
-                    injected.style.border = res.style.border;
-                    injected.textContent = res.textContent;
-                }
-            }
-            updateQuery();
-            </script>
-        </section>
-
-        <section style="
-                        font-size: clamp(40px, 1.4vw, 80px);
-                        ">
-          <h2>Lab: SQL Injection on Juice Shop</h2>
-          <ul>
-            <li>Go to <strong>http://localhost:3000/#/login</strong></li>
-            <li>In the <strong>email</strong> field, type exactly:</li>
-          </ul>
-          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
-            admin&apos; OR 1=1--
-          </pre>
-          <ul>
-            <li>Type anything you want in the password field — it won&apos;t be checked</li>
-            <li>Click Log In</li>
-            <li class="fragment">You are now logged in as the <strong>admin account</strong></li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>SQL Injection vs XSS — The Pattern</h2>
-          <ul>
-            <li>Both attacks follow the same root cause:</li>
-          </ul>
-          <ul>
-            <li class="fragment"><strong>XSS</strong> — user input gets treated as HTML/JavaScript</li>
-            <li class="fragment"><strong>SQL Injection</strong> — user input gets treated as SQL</li>
-            <li class="fragment"><strong>Fatal Flaw</strong> — Assuming user input wont be code</li>
-          </ul>
-        </section>
+<section>
+  <h2>SQL</h2>
+  <ul>
+    <li>SQL is a "Query" language</li>
+    <li class="fragment">Sentences in SQL "Query" the database for information</li>
+  </ul>
+  <pre class="fragment"
+       style="
+              font-size: clamp(20px, 1.5vw, 40px);
+              display:block;
+              width:100%;
+              text-align:left;
+              margin-left:0;
+              color:#ddd;
+              background:#111
+              margin-right:auto;
+              ">
+    -- "Give me everything about the user with this email"
+    SELECT * FROM users WHERE email = &apos;alice@example.com&apos;
+  </pre>
+  <p></p>
+</section>
 
 
+<section>
+  <h2>Logging in</h2>
+  <ul>
+    <li>Facebook needs to check your username and password</li>
+  </ul>
+  <pre class="fragment"
+       style="
+              font-size: clamp(20px, 1.5vw, 40px);
+              display:block;
+              width:100%;
+              text-align:left;
+              margin-left:0;
+              color:#ddd;
+              background:#111
+              margin-right:auto;
+              ">
+    SELECT * FROM users
+    WHERE email    = &apos;alice@example.com&apos;
+    AND   password = &apos;hunter2&apos;
+  </pre>
+  <ul>
+    <li class="fragment">If the query returns a row → logged in</li>
+    <li class="fragment">If no rows returned → access denied</li>
+  </ul>
+</section>
 
-        <!-- ===================== COOKIES ===================== -->
+<section>
+  <h2>Logging in</h2>
+  <ul>
+    <li>Facebook takes YOUR input, and checks the Database</li>
+    <li>Normal email: &nbsp;<code>alice@example.com</code></li>
+    <li class="fragment">Malicious email: &nbsp;<code>alice&apos; OR 1=1--</code></li>
+  </ul>
+  <pre class="fragment"
+       style="
+              font-size: clamp(20px, 1.5vw, 40px);
+              display:block;
+              width:100%;
+              text-align:left;
+              margin-left:0;
+              color:#ddd;
+              background:#111
+              margin-right:auto;
+              ">
+    -- What the server builds:
+    SELECT * FROM users
+    WHERE email    = &apos;alice&apos; OR 1=1--&apos;
+    AND   password = &apos;anything&apos;
+  </pre>
+  <ul>
+    <li class="fragment">The <strong>&apos;</strong> closes the email string early</li>
+    <li class="fragment"><strong>OR 1=1</strong> is always true — the WHERE clause always passes</li>
+    <li class="fragment"><strong>--</strong> is a SQL comment — it deletes the rest of the query</li>
+  </ul>
+</section>
 
-        <section>
-          <h2>Cookies</h2>
-        </section>
+<section>
+  <p style="font-size:0.75em; color:#aaa;">Type in the email field and watch the SQL query change:</p>
+  <input id="sqli-email" type="text" value="alice@example.com"
+         style="width:80%; padding:8px; font-size:0.85em; background:#222; color:#ddd; border:1px solid #555;"
+         oninput="updateQuery()"
+         />
+  <pre id="sqli-query" style="font-size:0.8em; background:#111; padding:15px; color:#ddd; margin-top:16px; white-space:pre-wrap;"></pre>
+  <div id="sqli-result" style="margin-top:10px; font-size:0.85em; padding:10px; border-radius:5px;"></div>
 
-        <section>
-          <h2>Stateless Websites</h2>
-          <ul>
-            <li>HTTP has no memory</li>
-            <li>Stateful websites have <em>states</em>
-              <ul>
-                <li>STATE: Logged in</li>
-              </ul>
-            </li>
-            <li class="fragment">HTTP is Stateless</li>
-            <li class="fragment">So how does Facebook know you&apos;re still logged in when you click to the next page?</li>
-          </ul>
-        </section>
+  <script>
+    function updateQuery() {
+        const email = document.getElementById('sqli-email').value;
+        const el = document.getElementById('sqli-query');
+        const res = document.getElementById('sqli-result');
 
-        <section>
-          <h2>Cookies</h2>
-          <ul>
-            <li>When you log in, the server creates a <strong>session</strong> and hands you a token</li>
-            <li class="fragment">That token is stored in your browser as a <strong>cookie</strong></li>
-            <li class="fragment">Your browser attaches that cookie to <em>every</em> request automatically</li>
-          </ul>
-          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
-            GET /feed HTTP/1.1
-            Host: facebook.com
-            Cookie: session=abc123xyz
-          </pre>
-        </section>
+        const safe = email.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        el.innerHTML = `SELECT * FROM users\nWHERE email = '<span style="color:#ff9944">${safe}</span>'\nAND   password = 'hunter2'`;
 
-        <section>
-          <h2>Cookies in the Browser</h2>
-          <ul>
-            <li>Open <strong>F12 → Application → Cookies</strong></li>
-            <li class="fragment">You can see every cookie a site has stored in your browser</li>
-          </ul>
-          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
-            Name:     token
-            Value:    eyJhbGciOiJSUzI1NiIsInR5...
-            HttpOnly: false
-            Secure:   false
-          </pre>
-          <ul>
-            <li class="fragment"><strong>HttpOnly: false</strong> means JavaScript can read this cookie</li>
-            <li class="fragment"><strong>Secure: false</strong> means it can be sent over plain HTTP, not just HTTPS</li>
-          </ul>
-        </section>
+        const isInjected = email.includes("'") || email.includes('--') || email.toLowerCase().includes('or');
+        if (isInjected) {
+            res.style.background = '#2a0000';
+            res.style.color = '#ff6666';
+            res.style.border = '1px solid #880000';
+            res.textContent = '⚠️ Input contains SQL characters — the query structure may be broken';
+        } else {
+        res.style.background = '#002a00';
+        res.style.color = '#66ff66';
+        res.style.border = '1px solid #008800';
+        res.textContent = '✅ Clean input — query is safe';
+        }
 
-        <section>
-          <h2>Session Hijacking</h2>
-          <ul>
-            <li>If someone gets your cookie value...</li>
-            <li class="fragment">They don&apos;t need your password</li>
-            <li class="fragment">Site logs them in as you "for free"</li>
-          </ul>
-          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
-            GET /account/settings HTTP/1.1
-            Host: juice-shop.com
-            Cookie: token=eyJhbGciOiJSUzI1NiIsInR5...
-          </pre>
-          <ul>
-            <li class="fragment">The server sees a valid token and hands over the account</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>Lab: Reading Cookies via the Console</h2>
-          <ul>
-            <li>Go to <strong>http://localhost:3000</strong> and log in as any user</li>
-            <li>Open <strong>F12 → Console</strong> and type:</li>
-          </ul>
-          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
-            document.cookie
-          </pre>
-          <ul>
-            <li class="fragment">You&apos;ll see the raw cookie string your browser is sending with every request</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>Lab: Hijack the Admin Session</h2>
-          <ul>
-            <li>We&apos;ll combine what we&apos;ve learned — use SQL injection to get admin, then steal the token</li>
-            <li>Log into Juice Shop using the SQL injection payload from earlier</li>
-            <li>Open <strong>F12 → Application → Local Storage → localhost:3000</strong></li>
-            <li>Find and copy the <strong>token</strong> value</li>
-          </ul>
-          <ul>
-            <li class="fragment">Now open a <strong>private/incognito window</strong> and go to <strong>http://localhost:3000</strong></li>
-            <li class="fragment">Open the console there and run:</li>
-          </ul>
-          <pre class="fragment" style="font-size:0.78em; background:#111; padding:15px; color:#ddd;">
-            localStorage.setItem(&apos;token&apos;, &apos;PASTE_TOKEN_HERE&apos;)
-          </pre>
-        </section>
-
-        <!-- ===================== SQL INJECTION ===================== -->
-
-        <section>
-          <h2>Teaching Web Security</h2>
-          <ul>
-            <li>The greatest tool - CTFs
-              <ul>
-                <li>ctftime</li>
-                <li>picoctf</li>
-                <li>Portswigger challenges</li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-
-        <!-- ===================== SUMMARY ===================== -->
-
-        <section>
-          <h2>Summary</h2>
-          <ul>
-            <li><strong>Dirbusting</strong> — find hidden paths the site doesn&apos;t link to</li>
-            <li class="fragment"><strong>XSS</strong> — inject JavaScript into pages to run code in other users&apos; browsers</li>
-            <li class="fragment"><strong>Cookie Theft</strong> — steal session tokens to impersonate users without a password</li>
-            <li class="fragment"><strong>SQL Injection</strong> — inject SQL into input fields to bypass auth or dump databases</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2>All Lab Instructions</h2>
-
-          <div style="
-                      font-size:0.75em;
-                      background:#111;
-                      padding:15px;
-                      color:#ddd;
-                      max-height:70vh;
-                      overflow-y:auto;
-                      border:1px solid #333;
-                      white-space:pre-wrap;
-                      font-family:monospace;
-                      ">
-
-            LAB 1: wget
-            - Run:
-            wget http://&lt;your-ip&gt;/index.html
-            cat index.html
-
-
-            LAB 2: Directory Busting (Juice Shop)
-            - Start dirb scan:
-            dirb http://localhost:3000
-            - Look for 200 responses (especially /scoreboard)
-            - Visit discovered paths manually
-
-
-            LAB 3: JavaScript Console (Juice Shop)
-            - Open http://localhost:3000
-            - Press F12 ? Console
-            - Run:
-            console.log("hello")
-            2 + 2
-            alert("I am in your browser")
-            document.title
-            document.title = "Hacked"
-            document.querySelector("h1").innerText = "Juice Hacked"
-
-
-            LAB 4: Reflected XSS
-            - Open:
-            http://localhost:3000/search?q=&lt;script&gt;alert(1)&lt;/script&gt;
-            - Or use browser widget slide
-
-
-            LAB 5: DOM XSS (Juice Shop search bar)
-            - Input:
-            &lt;iframe src="javascript:alert('xss')"&gt;
-
-
-            LAB 6: SQL Injection (login bypass)
-            - Go to:
-            http://localhost:3000/#/login
-            - Email field:
-            admin&apros; OR 1=1--
-            - Any password works
-
-
-            LAB 7: Cookies
-            - Open DevTools ? Application ? Cookies
-            - Run in console:
-            document.cookie
-
-
-            LAB 8: Session Hijacking (demo)
-            - Copy token from Local Storage
-            - In incognito:
-            localStorage.setItem(&apros;token&apros;, &apros;PASTE_TOKEN_HERE&apros;)
-
-          </div>
-        </section>
-
-        <script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
-
-        <script>
-          Reveal.initialize({
-              hash: true,
-              slideNumber: true
-          });
-
-          document.addEventListener('keydown', function(e) {
-              if (e.key === '+' || e.key === '=') {
-                  document.querySelector('.reveal').style.fontSize = 
-                      (parseInt(getComputedStyle(document.querySelector('.reveal')).fontSize) + 2) + 'px';
-              }
-              if (e.key === '-') {
-                  document.querySelector('.reveal').style.fontSize = 
-                      (parseInt(getComputedStyle(document.querySelector('.reveal')).fontSize) - 2) + 'px';
-              }
-          });
-
+        // sync to next slide
+        const injected = document.getElementById('sqli-result-2');
+        const query2 = document.getElementById('sqli-query-2');
+        if (injected && query2) {
+        query2.innerHTML = el.innerHTML;
+        injected.style.background = res.style.background;
+        injected.style.color = res.style.color;
+        injected.style.border = res.style.border;
+        injected.textContent = res.textContent;
+        }
+        }
+        updateQuery();
         </script>
+</section>
 
-        <script>
+<section style="
+                font-size: clamp(40px, 1.4vw, 80px);
+                ">
+  <h2>Lab: SQL Injection on Juice Shop</h2>
+  <ul>
+    <li>Go to <strong>http://localhost:3000/#/login</strong></li>
+    <li>In the <strong>email</strong> field, type exactly:</li>
+  </ul>
+  <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+    admin&apos; OR 1=1--
+  </pre>
+  <ul>
+    <li>Type anything you want in the password field — it won&apos;t be checked</li>
+    <li>Click Log In</li>
+    <li class="fragment">You are now logged in as the <strong>admin account</strong></li>
+  </ul>
+</section>
 
-          function runFromSlide(event) {
-              const slide = event.target.closest("section");
+<section>
+  <h2>SQL Injection vs XSS — The Pattern</h2>
+  <ul>
+    <li>Both attacks follow the same root cause:</li>
+  </ul>
+  <ul>
+    <li class="fragment"><strong>XSS</strong> — user input gets treated as HTML/JavaScript</li>
+    <li class="fragment"><strong>SQL Injection</strong> — user input gets treated as SQL</li>
+    <li class="fragment"><strong>Fatal Flaw</strong> — Assuming user input wont be code</li>
+  </ul>
+</section>
 
-              const code = slide.querySelector(".editor").value;
-              const preview = slide.nextElementSibling.querySelector(".preview");
 
-              preview.srcdoc = code;
 
-              Reveal.next();
-          }
+<!-- ===================== COOKIES ===================== -->
 
-          const sources = [
-              {
-                  link: "https://www.ionos.com/digitalguide/websites/web-development/arpanet-definition-history-of-the-internet-predecessor/",
-              },
-              {
-                  link: "https://en.wikipedia.org/wiki/History_of_the_Internet",
-              },
-              {
-                  link: "https://en.wikipedia.org/wiki/History_of_the_Internet",
-              },
-              {
-                  link: "https://www.sciencemuseum.org.uk/objects-and-stories/arpanet-internet",
-              },
-          ];
-        </script>
+<section>
+  <h2>Cookies</h2>
+</section>
 
-  </body>
+<section>
+  <h2>Stateless Websites</h2>
+  <ul>
+    <li>HTTP has no memory</li>
+    <li>Stateful websites have <em>states</em>
+      <ul>
+        <li>STATE: Logged in</li>
+      </ul>
+    </li>
+    <li class="fragment">HTTP is Stateless</li>
+    <li class="fragment">So how does Facebook know you&apos;re still logged in when you click to the next page?</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Cookies</h2>
+  <ul>
+    <li>When you log in, the server creates a <strong>session</strong> and hands you a token</li>
+    <li class="fragment">That token is stored in your browser as a <strong>cookie</strong></li>
+    <li class="fragment">Your browser attaches that cookie to <em>every</em> request automatically</li>
+  </ul>
+  <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+    GET /feed HTTP/1.1
+    Host: facebook.com
+    Cookie: session=abc123xyz
+  </pre>
+</section>
+
+<section>
+  <h2>Cookies in the Browser</h2>
+  <ul>
+    <li>Open <strong>F12 → Application → Cookies</strong></li>
+    <li class="fragment">You can see every cookie a site has stored in your browser</li>
+  </ul>
+  <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+    Name:     token
+    Value:    eyJhbGciOiJSUzI1NiIsInR5...
+    HttpOnly: false
+    Secure:   false
+  </pre>
+  <ul>
+    <li class="fragment"><strong>HttpOnly: false</strong> means JavaScript can read this cookie</li>
+    <li class="fragment"><strong>Secure: false</strong> means it can be sent over plain HTTP, not just HTTPS</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Session Hijacking</h2>
+  <ul>
+    <li>If someone gets your cookie value...</li>
+    <li class="fragment">They don&apos;t need your password</li>
+    <li class="fragment">Site logs them in as you "for free"</li>
+  </ul>
+  <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+    GET /account/settings HTTP/1.1
+    Host: juice-shop.com
+    Cookie: token=eyJhbGciOiJSUzI1NiIsInR5...
+  </pre>
+  <ul>
+    <li class="fragment">The server sees a valid token and hands over the account</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Lab: Reading Cookies via the Console</h2>
+  <ul>
+    <li>Go to <strong>http://localhost:3000</strong> and log in as any user</li>
+    <li>Open <strong>F12 → Console</strong> and type:</li>
+  </ul>
+  <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+    document.cookie
+  </pre>
+  <ul>
+    <li class="fragment">You&apos;ll see the raw cookie string your browser is sending with every request</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Lab: Hijack the Admin Session</h2>
+  <ul>
+    <li>We&apos;ll combine what we&apos;ve learned — use SQL injection to get admin, then steal the token</li>
+    <li>Log into Juice Shop using the SQL injection payload from earlier</li>
+    <li>Open <strong>F12 → Application → Local Storage → localhost:3000</strong></li>
+    <li>Find and copy the <strong>token</strong> value</li>
+  </ul>
+  <ul>
+    <li class="fragment">Now open a <strong>private/incognito window</strong> and go to <strong>http://localhost:3000</strong></li>
+    <li class="fragment">Open the console there and run:</li>
+  </ul>
+  <pre class="fragment" style="font-size:0.78em; background:#111; padding:15px; color:#ddd;">
+    localStorage.setItem(&apos;token&apos;, &apos;PASTE_TOKEN_HERE&apos;)
+  </pre>
+</section>
+
+<!-- ===================== SQL INJECTION ===================== -->
+
+<section>
+  <h2>Teaching Web Security</h2>
+  <ul>
+    <li>The greatest tool - CTFs
+      <ul>
+        <li>ctftime</li>
+        <li>picoctf</li>
+        <li>Portswigger challenges</li>
+      </ul>
+    </li>
+  </ul>
+</section>
+
+<!-- ===================== SUMMARY ===================== -->
+
+<section>
+  <h2>Summary</h2>
+  <ul>
+    <li><strong>Dirbusting</strong> — find hidden paths the site doesn&apos;t link to</li>
+    <li class="fragment"><strong>XSS</strong> — inject JavaScript into pages to run code in other users&apos; browsers</li>
+    <li class="fragment"><strong>Cookie Theft</strong> — steal session tokens to impersonate users without a password</li>
+    <li class="fragment"><strong>SQL Injection</strong> — inject SQL into input fields to bypass auth or dump databases</li>
+  </ul>
+</section>
+
+<section>
+  <h2>All Lab Instructions</h2>
+
+  <div style="
+              font-size:0.75em;
+              background:#111;
+              padding:15px;
+              color:#ddd;
+              max-height:70vh;
+              overflow-y:auto;
+              border:1px solid #333;
+              white-space:pre-wrap;
+              font-family:monospace;
+              ">
+
+    LAB 1: wget
+    - Run:
+    wget http://&lt;your-ip&gt;/index.html
+    cat index.html
+
+
+    LAB 2: Directory Busting (Juice Shop)
+    - Start dirb scan:
+    dirb http://localhost:3000
+    - Look for 200 responses (especially /scoreboard)
+    - Visit discovered paths manually
+
+
+    LAB 3: JavaScript Console (Juice Shop)
+    - Open http://localhost:3000
+    - Press F12 ? Console
+    - Run:
+    console.log("hello")
+    2 + 2
+    alert("I am in your browser")
+    document.title
+    document.title = "Hacked"
+    document.querySelector("h1").innerText = "Juice Hacked"
+
+
+    LAB 4: Reflected XSS
+    - Open:
+    http://localhost:3000/search?q=&lt;script&gt;alert(1)&lt;/script&gt;
+    - Or use browser widget slide
+
+
+    LAB 5: DOM XSS (Juice Shop search bar)
+    - Input:
+    &lt;iframe src="javascript:alert('xss')"&gt;
+
+
+    LAB 6: SQL Injection (login bypass)
+    - Go to:
+    http://localhost:3000/#/login
+    - Email field:
+    admin&apros; OR 1=1--
+    - Any password works
+
+
+    LAB 7: Cookies
+    - Open DevTools ? Application ? Cookies
+    - Run in console:
+    document.cookie
+
+
+    LAB 8: Session Hijacking (demo)
+    - Copy token from Local Storage
+    - In incognito:
+    localStorage.setItem(&apros;token&apros;, &apros;PASTE_TOKEN_HERE&apros;)
+
+  </div>
+</section>
+
+<script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
+
+<script>
+  Reveal.initialize({
+      hash: true,
+      slideNumber: true
+  });
+
+  document.addEventListener('keydown', function(e) {
+      if (e.key === '+' || e.key === '=') {
+          document.querySelector('.reveal').style.fontSize = 
+              (parseInt(getComputedStyle(document.querySelector('.reveal')).fontSize) + 2) + 'px';
+      }
+      if (e.key === '-') {
+          document.querySelector('.reveal').style.fontSize = 
+              (parseInt(getComputedStyle(document.querySelector('.reveal')).fontSize) - 2) + 'px';
+      }
+  });
+
+</script>
+
+<script>
+
+  function runFromSlide(event) {
+      const slide = event.target.closest("section");
+
+      const code = slide.querySelector(".editor").value;
+      const preview = slide.nextElementSibling.querySelector(".preview");
+
+      preview.srcdoc = code;
+
+      Reveal.next();
+  }
+
+  const sources = [
+      {
+          link: "https://www.ionos.com/digitalguide/websites/web-development/arpanet-definition-history-of-the-internet-predecessor/",
+      },
+      {
+          link: "https://en.wikipedia.org/wiki/History_of_the_Internet",
+      },
+      {
+          link: "https://en.wikipedia.org/wiki/History_of_the_Internet",
+      },
+      {
+          link: "https://www.sciencemuseum.org.uk/objects-and-stories/arpanet-internet",
+      },
+  ];
+</script>
+
+</body>
 </html>
 
