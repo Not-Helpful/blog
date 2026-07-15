@@ -1,0 +1,915 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Prompt Engineering - Motive &amp; Attention</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="https://unpkg.com/reveal.js/dist/theme/black.css">
+
+    <style>
+      .reveal .slides section {
+          text-align: left;
+      }
+
+      .reveal h2 {
+          font-size: 1.4em;
+          text-transform: none;
+          font-weight: 600;
+          text-align: left;
+      }
+
+      .reveal h3 {
+          font-size: 1.1em;
+          font-weight: 500;
+      }
+
+      .reveal ul {
+          font-size: 0.85em;
+          line-height: 1.4em;
+      }
+
+      .reveal pre {
+          font-size: 0.7em;
+      }
+
+      .callout {
+          border-left: 4px solid #cc9933;
+          padding: 10px 20px;
+          background: #1a1a1a;
+          font-size: 0.9em;
+      }
+
+      .beat {
+          color: #888;
+          font-size: 0.6em;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="reveal">
+      <div class="slides">
+
+        <!-- ===================== TITLE ===================== -->
+
+        <section>
+          <h2>Prompt Engineering</h2>
+        </section>
+
+        <section>
+          <h2>Learning Objective</h2>
+          <ul>
+            <li>Every conversation - human or otherwise - is driven by something</li>
+            <li>Understand what an LLM is "trying" to do before we try to steer it</li>
+          </ul>
+        </section>
+
+        <!-- ===================== STORY: THE ARGUMENT ===================== -->
+
+        <section>
+          <span class="beat">A Story</span>
+          <h2>The Argument</h2>
+          <ul>
+            <li class="fragment">Meet a friend of mine: Brennen Perkins</li>
+            <li class="fragment">Brennen and I disagree about a political issue taking place in another country</li>
+            <li class="fragment">We argued for 3 hours about the situation</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Political Arguments</h2>
+          <p class="fragment">Rarely productive</p>
+        </section>
+
+        <section>
+          <h2>A Twist</h2>
+          <ul class="fragment">
+            <li>He changed his mind</li>
+          </ul>
+          <h2 class="fragment">Another Twist</h2>
+          <ul class="fragment">
+            <li>So did I</li>
+          </ul>
+          <p class="fragment" style="color:#ff9944;">We still disagreed</p>
+        </section>
+
+        <section>
+          <h2>Why Did That Work?</h2>
+          <div class="callout fragment">
+            We both showed up wanting the same thing: to actually hear the other person out.
+          </div>
+        </section>
+
+        <!-- ===================== STORY: THE LIAR ===================== -->
+
+        <section>
+          <h2>Have You Ever Met a Liar?</h2>
+          <ul>
+            <li class="fragment">Why are they lying?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Who broke the Tv?</h2>
+        </section>
+
+        <section>
+          <h2>Motive is Obvious</h2>
+          <ul class="fragment">
+            <li>Kid lying about who broke the tv</li>
+            <li class="fragment">Obvious motive: avoid getting in trouble</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>A Harder Question</h2>
+          <p class="fragment" style="font-size:0.95em;">Have you ever met a liar where you weren&apos;t sure what they even got out of it?</p>
+          <p class="fragment" style="color:#66ccff;">Weird motive. Silly motive. Still a motive.</p>
+        </section>
+
+        <!-- ===================== KEY TAKEAWAY ===================== -->
+
+        <section>
+          <h2>Key Takeaway</h2>
+          <div class="callout">
+            <p>Conversation does not exist without motive.</p>
+            <p>Every word someone says comes from their motive.</p>
+          </div>
+        </section>
+
+        <section>
+          <h2>So What&apos;s an LLM&apos;s Motive?</h2>
+          <ul class="fragment">
+            <li>LLM's aren't afraid of consequences.</li>
+            <li class="fragment">Or trying to convice you they are a good person.</li>
+            <li class="fragment">One motive, and only one: <strong>predict the next word</strong></li>
+          </ul>
+        </section>
+        <!-- ===================== SECTION 2: HOW LLMs WORK ===================== -->
+
+        <section>
+          <h2>How to Select the Next Word</h2>
+          <p class="beat">Part 2: Training data, attention, and one word at a time</p>
+        </section>
+
+        <section>
+          <h2>Learning Objective</h2>
+          <ul>
+            <li>Two ingredients go into every word an LLM produces: training data and your prompt</li>
+            <li>See how the model decides which ingredient matters most, word by word</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Two Ingredients</h2>
+          <ul>
+            <li><strong>Training data</strong> - millions of sentences the model has already read</li>
+            <li><strong>Your prompt</strong> - the sentence you just handed it</li>
+          </ul>
+          <p class="fragment">The "Next Word" comes from a combination of these two sources</p>
+        </section>
+
+        <section>
+          <h2>Attention</h2>
+          <ul>
+            <li>When predicting the next word, the model doesn&apos;t treat every word you typed equally</li>
+            <li class="fragment">It decides which of your words matter most <em>right now</em></li>
+            <li class="fragment">That decision is called <strong>attention</strong></li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Self-Attention</h2>
+          <ul>
+            <li>Every word in your prompt looks at every other word in your prompt</li>
+            <li class="fragment">And asks: "how relevant are you to me?"</li>
+            <li class="fragment">The words with the strongest pull get listened to the most</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Let&apos;s Build a Tiny Model</h2>
+          <ul>
+            <li>Imagine our entire training data is just five sentences:</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            The cat likes milk
+            The dog likes bones
+            The fish likes bubbles
+            The cat hates water
+            The dog hates cats
+          </pre>
+        </section>
+
+        <section>
+          <h2>The Prompt</h2>
+          <pre style="font-size:1em; background:#111; padding:20px; color:#ddd; text-align:center;">
+            The cat likes ___
+          </pre>
+          <p class="fragment">What word comes next?</p>
+        </section>
+
+        <section>
+          <h2>Step 1: Score Every Word</h2>
+          <ul>
+            <li>Model weights importance of each word</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.9em; background:#111; padding:15px; color:#ddd;">
+            Q(likes) . K(The)   = 0.02
+            Q(likes) . K(cat)   = 0.58
+            Q(likes) . K(likes) = 0.40
+          </pre>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            The cat likes milk
+            The dog likes bones
+            The fish likes bubbles
+            The cat hates water
+            The dog hates cats
+          </pre>
+        </section>
+
+        <section>
+          <h2>Step 1: Score Every Word</h2>
+          <div style="display:flex; align-items:flex-end; gap:40px; height:280px; padding-top:40px;">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+              <div class="fragment" style="width:80px; height:8px; background:#3366cc; border-radius:4px 4px 0 0;"></div>
+              <p style="margin-top:10px; font-size:0.8em;">"The" &mdash; 0.02</p>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+              <div class="fragment" style="width:80px; height:134px; background:#00cc88; border-radius:4px 4px 0 0;"></div>
+              <p style="margin-top:10px; font-size:0.8em;">"cat" &mdash; 0.58</p>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+              <div class="fragment" style="width:80px; height:92px; background:#ffcc00; border-radius:4px 4px 0 0;"></div>
+              <p style="margin-top:10px; font-size:0.8em;">"likes" &mdash; 0.40</p>
+            </div>
+          </div>
+          <p class="fragment" style="text-align:center; color:#66ccff;">"cat" and "likes" together win almost all of the attention</p>
+        </section>
+
+        <section>
+          <h2>Step 2: Attention Points</h2>
+          <ul>
+            <li>High attention on "cat" <strong>and</strong> "likes" means: <strong>both matter most for the next word</strong></li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            The <span style="color:#00cc88; font-weight:bold;">cat</span> <span style="color:#ffcc00; font-weight:bold;">likes</span> ___
+          </pre>
+          <p class="fragment">But how does the model select the next word?</p>
+        </section>
+
+        <section>
+          <h2>Training Phase</h2>
+          <ul>
+            <li>Training phase took place when model was created</li>
+            <li class="fragment">Sees sentences featuring "cat"</li>
+            <li class="fragment">Learns words associated with "cat"</li>
+            <li class="fragment">Model develops associations like "cat" <-> "pet"</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>An Example</h2>
+          <ul>
+            <li>Think about <strong>sources</strong>:</li>
+            <li class="fragment">If a sentence has the phrase: "Big Cat"</li>
+            <ul class="fragment">
+              <li>What was it referencing?</li>
+            </ul>
+            <li class="fragment">"House Cat"?</li>
+            <li class="fragment">"Fat Cat"?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>An Example</h2>
+          <ul>
+            <li>Think about <strong>sources</strong>:</li>
+            <li class="fragment">Sentence contains: "cat" and "likes"</li>
+            <ul class="fragment">
+              <li>What was it referencing?</li>
+            </ul>
+            <li class="fragment">Sentence contains: "cat" and "like"</li>
+            <ul class="fragment">
+              <li>What was it referencing?</li>
+            </ul>
+          </ul>
+          <p class="fragment">The cat ran like the wind</p>
+        </section>
+
+        <section>
+          <h2>Meet the Actors</h2>
+          <ul>
+            <li>Imagine the model keeps one actor standing on stage for every word it knows</li>
+            <li class="fragment">The milk actor only has 1 line: <strong>milk</strong></li>
+            <li class="fragment">When the spotlight shines on them, they say their line</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Places, Everyone!</h2>
+          <ul>
+            <li>Training decided where they stand</li>
+            <li class="fragment">Words with similar meanings are shoulder to shoulder</li>
+            <li class="fragment">"milk," "water," "juice" - all clustered in the same corner of the stage</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Attention Shines the Spotlight</h2>
+          <ul>
+            <li>Attention decided "cat" <strong>and</strong> "likes" both matter</li>
+            <li>Those two words point the spotlight to one part of the stage</li>
+          </ul>
+          <div style="text-align:center; margin-top:10px;">
+            <svg viewBox="0 0 800 460" style="width:80%; height:auto;">
+              <!-- backdrop -->
+              <rect x="0" y="0" width="800" height="380" fill="#1a0f0f"/>
+              <rect x="0" y="0" width="800" height="380" fill="#2b1414" opacity="0.6"/>
+              <!-- stage floor -->
+              <rect x="20" y="380" width="760" height="60" rx="6" fill="#3a2a1a"/>
+              <rect x="20" y="380" width="760" height="10" fill="#4a3626"/>
+
+              <!-- spotlight cone -->
+              <polygon points="380,10 250,400 580,400" fill="#ffe066" opacity="0.16"/>
+              <ellipse cx="405" cy="400" rx="170" ry="18" fill="#ffe066" opacity="0.18"/>
+
+              <!-- dim actor: table -->
+              <g stroke="#555" stroke-width="4" fill="none">
+                <circle cx="90" cy="330" r="14" fill="#333" stroke="#555"/>
+                <line x1="90" y1="344" x2="90" y2="392"/>
+                <line x1="75" y1="360" x2="105" y2="360"/>
+                <line x1="90" y1="392" x2="76" y2="412"/>
+                <line x1="90" y1="392" x2="104" y2="412"/>
+              </g>
+              <text x="90" y="432" text-anchor="middle" fill="#555" font-size="13">table</text>
+
+              <!-- dim actor: dog -->
+              <g stroke="#555" stroke-width="4" fill="none">
+                <circle cx="180" cy="330" r="14" fill="#333" stroke="#555"/>
+                <line x1="180" y1="344" x2="180" y2="392"/>
+                <line x1="165" y1="360" x2="195" y2="360"/>
+                <line x1="180" y1="392" x2="166" y2="412"/>
+                <line x1="180" y1="392" x2="194" y2="412"/>
+              </g>
+              <text x="180" y="432" text-anchor="middle" fill="#555" font-size="13">dog</text>
+
+              <!-- lit actor: milk -->
+              <g stroke="#ffe066" stroke-width="4" fill="none">
+                <circle cx="290" cy="330" r="14" fill="#3a3520" stroke="#ffe066"/>
+                <line x1="290" y1="344" x2="290" y2="392"/>
+                <line x1="275" y1="360" x2="305" y2="360"/>
+                <line x1="290" y1="392" x2="276" y2="412"/>
+                <line x1="290" y1="392" x2="304" y2="412"/>
+              </g>
+              <rect x="245" y="255" width="90" height="34" rx="8" fill="#fff"/>
+              <polygon points="280,289 295,289 285,305" fill="#fff"/>
+              <text x="290" y="277" text-anchor="middle" fill="#111" font-size="15" font-weight="bold">water</text>
+
+              <!-- lit actor: water -->
+              <g stroke="#ffe066" stroke-width="4" fill="none">
+                <circle cx="385" cy="330" r="14" fill="#3a3520" stroke="#ffe066"/>
+                <line x1="385" y1="344" x2="385" y2="392"/>
+                <line x1="370" y1="360" x2="400" y2="360"/>
+                <line x1="385" y1="392" x2="371" y2="412"/>
+                <line x1="385" y1="392" x2="399" y2="412"/>
+              </g>
+              <rect x="335" y="250" width="100" height="34" rx="8" fill="#fff"/>
+              <polygon points="375,284 390,284 380,300" fill="#fff"/>
+              <text x="385" y="272" text-anchor="middle" fill="#111" font-size="15" font-weight="bold">milk</text>
+
+              <!-- lit actor: juice -->
+              <g stroke="#ffe066" stroke-width="4" fill="none">
+                <circle cx="480" cy="330" r="14" fill="#3a3520" stroke="#ffe066"/>
+                <line x1="480" y1="344" x2="480" y2="392"/>
+                <line x1="465" y1="360" x2="495" y2="360"/>
+                <line x1="480" y1="392" x2="466" y2="412"/>
+                <line x1="480" y1="392" x2="494" y2="412"/>
+              </g>
+              <rect x="432" y="255" width="96" height="34" rx="8" fill="#fff"/>
+              <polygon points="472,289 487,289 477,305" fill="#fff"/>
+              <text x="480" y="277" text-anchor="middle" fill="#111" font-size="15" font-weight="bold">juice</text>
+
+              <!-- lit actor: soda -->
+              <g stroke="#ffe066" stroke-width="4" fill="none">
+                <circle cx="565" cy="330" r="14" fill="#3a3520" stroke="#ffe066"/>
+                <line x1="565" y1="344" x2="565" y2="392"/>
+                <line x1="550" y1="360" x2="580" y2="360"/>
+                <line x1="565" y1="392" x2="551" y2="412"/>
+                <line x1="565" y1="392" x2="579" y2="412"/>
+              </g>
+              <rect x="518" y="250" width="94" height="34" rx="8" fill="#fff"/>
+              <polygon points="558,284 573,284 563,300" fill="#fff"/>
+              <text x="565" y="272" text-anchor="middle" fill="#111" font-size="15" font-weight="bold">soda</text>
+
+              <!-- dim actor: fish -->
+              <g stroke="#555" stroke-width="4" fill="none">
+                <circle cx="660" cy="330" r="14" fill="#333" stroke="#555"/>
+                <line x1="660" y1="344" x2="660" y2="392"/>
+                <line x1="645" y1="360" x2="675" y2="360"/>
+                <line x1="660" y1="392" x2="646" y2="412"/>
+                <line x1="660" y1="392" x2="674" y2="412"/>
+              </g>
+              <text x="660" y="432" text-anchor="middle" fill="#555" font-size="13">fish</text>
+
+              <!-- dim actor: run -->
+              <g stroke="#555" stroke-width="4" fill="none">
+                <circle cx="730" cy="330" r="14" fill="#333" stroke="#555"/>
+                <line x1="730" y1="344" x2="730" y2="392"/>
+                <line x1="715" y1="360" x2="745" y2="360"/>
+                <line x1="730" y1="392" x2="716" y2="412"/>
+                <line x1="730" y1="392" x2="744" y2="412"/>
+              </g>
+              <text x="730" y="432" text-anchor="middle" fill="#555" font-size="13">run</text>
+            </svg>
+          </div>
+        </section>
+
+        <section>
+          <h2>The Spotlight is Crowded</h2>
+          <ul>
+            <li>Actors with similar meanings cluster close together</li>
+            <li class="fragment">The spotlight doesn&apos;t land on one actor, it lands on a <em>neighborhood</em></li>
+            <li class="fragment">"milk" shouts loudest, but "water," "juice," and "soda" shout too</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Sampling</h2>
+          <ul>
+            <li>Whoever spoke up becomes a candidate</li>
+            <li class="fragment">The model rolls a weighted die to pick a word</li>
+            <li class="fragment">"milk" was standing closest to the center. Wins most of the time</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Step 3: Pick the Word</h2>
+          <ul>
+            <li>The spotlight lands near where "cat" and "likes" point together</li>
+            <li class="fragment">A handful of actors shout, sampling picks one</li>
+          </ul>
+          <pre class="fragment" style="font-size:1em; background:#111; padding:20px; color:#66ff66; text-align:center;">
+            The cat likes milk
+          </pre>
+        </section>
+
+        <section>
+          <h2>Try It: Swap the Subject and the Verb</h2>
+          <p style="font-size:0.8em;">
+            Pick a subject and a verb, and watch both attention scores - and the predicted word - shift.
+          </p>
+
+          <div style="display:flex; gap:10px; margin-top:16px;">
+            <button id="btn-cat" onclick="setSubject('cat')" style="flex:1; background:#1e1e2e; color:#ddd; border:1px solid #444; border-radius:6px; padding:10px; cursor:pointer;">cat</button>
+            <button id="btn-dog" onclick="setSubject('dog')" style="flex:1; background:#1e1e2e; color:#ddd; border:1px solid #444; border-radius:6px; padding:10px; cursor:pointer;">dog</button>
+            <button id="btn-fish" onclick="setSubject('fish')" style="flex:1; background:#1e1e2e; color:#ddd; border:1px solid #444; border-radius:6px; padding:10px; cursor:pointer;">fish</button>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-top:10px;">
+            <button id="btn-likes" onclick="setVerb('likes')" style="flex:1; background:#1e1e2e; color:#ddd; border:1px solid #444; border-radius:6px; padding:10px; cursor:pointer;">likes</button>
+            <button id="btn-hates" onclick="setVerb('hates')" style="flex:1; background:#1e1e2e; color:#ddd; border:1px solid #444; border-radius:6px; padding:10px; cursor:pointer;">hates</button>
+          </div>
+
+          <div style="display:flex; align-items:flex-end; gap:40px; height:220px; padding-top:30px; margin-top:20px;">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+              <div id="bar-the" style="width:70px; height:8px; background:#3366cc; border-radius:4px 4px 0 0; transition: height 0.4s ease;"></div>
+              <p style="margin-top:10px; font-size:0.8em;">"The"</p>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+              <div id="bar-subj" style="width:70px; height:8px; background:#00cc88; border-radius:4px 4px 0 0; transition: height 0.4s ease;"></div>
+              <p id="subj-label" style="margin-top:10px; font-size:0.8em;">&mdash;</p>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%;">
+              <div id="bar-verb" style="width:70px; height:8px; background:#ffcc00; border-radius:4px 4px 0 0; transition: height 0.4s ease;"></div>
+              <p id="verb-label" style="margin-top:10px; font-size:0.8em;">&mdash;</p>
+            </div>
+          </div>
+
+          <pre id="predicted-output" style="font-size:1em; background:#111; padding:15px; color:#66ff66; text-align:center; margin-top:10px;">
+          </pre>
+
+          <script>
+            const comboData = {
+                cat_likes:  { subj: 0.58, verb: 0.40, next: "milk" },
+                cat_hates:  { subj: 0.60, verb: 0.38, next: "water" },
+                dog_likes:  { subj: 0.55, verb: 0.42, next: "bones" },
+                dog_hates:  { subj: 0.62, verb: 0.36, next: "cats" },
+                fish_likes: { subj: 0.57, verb: 0.41, next: "bubbles" },
+                fish_hates: { subj: 0.65, verb: 0.33, next: "hooks" }
+            };
+
+            let currentSubject = null;
+            let currentVerb = null;
+
+            function refreshButtons() {
+                ['cat','dog','fish'].forEach(w => {
+                    const btn = document.getElementById('btn-' + w);
+                    btn.style.background = (w === currentSubject) ? '#00cc88' : '#1e1e2e';
+                    btn.style.color = (w === currentSubject) ? '#111' : '#ddd';
+                });
+                ['likes','hates'].forEach(w => {
+                    const btn = document.getElementById('btn-' + w);
+                    btn.style.background = (w === currentVerb) ? '#ffcc00' : '#1e1e2e';
+                    btn.style.color = (w === currentVerb) ? '#111' : '#ddd';
+                });
+            }
+
+            function render() {
+                document.getElementById('bar-the').style.height = "8px";
+                if (currentSubject) {
+                    document.getElementById('subj-label').innerText = `"${currentSubject}"`;
+                } else {
+                    document.getElementById('bar-subj').style.height = "8px";
+                    document.getElementById('subj-label').innerText = "";
+                }
+                if (currentVerb) {
+                    document.getElementById('verb-label').innerText = `"${currentVerb}"`;
+                } else {
+                    document.getElementById('bar-verb').style.height = "8px";
+                    document.getElementById('verb-label').innerText = "";
+                }
+
+                if (currentSubject && currentVerb) {
+                    const data = comboData[currentSubject + '_' + currentVerb];
+                    document.getElementById('bar-subj').style.height = (data.subj * 230) + "px";
+                    document.getElementById('bar-verb').style.height = (data.verb * 230) + "px";
+                    document.getElementById('subj-label').innerText = `"${currentSubject}"  ${data.subj}`;
+                    document.getElementById('verb-label').innerText = `"${currentVerb}"  ${data.verb}`;
+                    document.getElementById('predicted-output').innerText = `The ${currentSubject} ${currentVerb} ${data.next}`;
+                } else {
+                    document.getElementById('predicted-output').innerText = "Pick a subject and a verb above";
+                }
+                refreshButtons();
+            }
+
+            function setSubject(word) {
+                currentSubject = word;
+                render();
+            }
+
+            function setVerb(word) {
+                currentVerb = word;
+                render();
+            }
+          </script>
+        </section>
+
+        <section>
+          <h2>One Word at a Time</h2>
+          <ul>
+            <li>The model doesn&apos;t write a sentence</li>
+            <li class="fragment">It writes <strong>one word</strong>, then re-reads everything - including its own new word - and does this whole process again</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Brining it All Together</h2>
+          <ul>
+            <li>New prompt. Just one word:</li>
+          </ul>
+          <pre class="fragment" style="font-size:1em; background:#111; padding:20px; color:#ddd; text-align:center;">
+            The ___
+          </pre>
+        </section>
+
+        <section>
+          <h2>Choices, choices...</h2>
+          <ul>
+            <li>Any sentence starting with The is equally likely</li>
+            <li class="fragment">Sampling selects a possibility at random</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>The Model&apos;s Short List</h2>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            cat    30%
+            dog    25%
+            fish   20%
+            table  15%
+            ...     10%
+          </pre>
+        </section>
+
+        <section>
+          <h2>The Roll Lands On...</h2>
+          <p class="fragment" style="font-size:1.3em; text-align:center; color:#66ff66;">dog</p>
+        </section>
+
+        <section>
+          <h2>Round Two: "The dog ___"</h2>
+          <ul>
+            <li>Now there are two words to attend over</li>
+            <li class="fragment">Self-attention re-runs from scratch - "dog" pulls almost all of the weight</li>
+          </ul>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            The <span style="color:#00cc88; font-weight:bold;">dog</span> ___
+          </pre>
+        </section>
+
+        <section>
+          <h2>A New Short List</h2>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            likes  55%
+            hates  40%
+            ...     5%
+          </pre>
+        </section>
+
+        <section>
+          <h2>Sampling Again</h2>
+          <p class="fragment" style="font-size:1.3em; text-align:center; color:#66ff66;">likes</p>
+        </section>
+
+        <section>
+          <h2>Round Three: "The dog likes ___"</h2>
+          <pre class="fragment" style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            bones   98%
+            ...      2%
+          </pre>
+        </section>
+
+        <section>
+          <h2>Still a Roll - Just a Loaded One</h2>
+          <ul>
+            <li>Sampling still happens on this word</li>
+            <li class="fragment">But at 98%, it almost always lands the same way</li>
+          </ul>
+          <pre class="fragment" style="font-size:1em; background:#111; padding:20px; color:#66ff66; text-align:center;">
+            The dog likes bones
+          </pre>
+        </section>
+
+        <section>
+          <h2>The Motive</h2>
+          <ul>
+            <li>An LLM has exactly one motive: predict the next word</li>
+            <li class="fragment">It decides which words matter using attention</li>
+            <li class="fragment">Attention shines a spotlight on the stage that training already arranged</li>
+            <li class="fragment">Sampling selects one of the candidate words</li>
+            <li class="fragment">Repeat, one word at a time</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>The Takeaway</h2>
+          <p class="fragment" style="font-size:1em;">If you understand what pulls attention, you can steer what gets predicted.</p>
+          <p class="fragment" style="color:#66ccff;">That&apos;s prompt engineering.</p>
+        </section>
+
+        <section>
+          <h2>Prompting</h2>
+        </section>
+
+
+        <section>
+          <h2>X-Shot Prompting</h2>
+          <ul>
+            <li>One-shot prompts are one single block of text</li>
+            <li>Few-shot prompts are broken up over multiple messages</li>
+          </ul>
+        </section>
+
+
+        <section>
+          <h2>Exemplars</h2>
+          <ul>
+            <li>Providing examples with your prompt</li>
+          </ul>
+        </section>
+
+        <section>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            Trees are pretty: Happy
+            I hate Pizza: Angry
+            Dogs are cute: Happy
+            Youtube Sucks: Angry
+            ========================
+            Im so excited: ______
+          </pre>
+        </section>
+
+        <section>
+          <h2>Exemplars</h2>
+          <ul>
+            <li>What works:
+              <ol>
+                <li>Many Examples</li>
+              </ol>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p style="color:red">Bad</p>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            Trees are pretty: Happy
+            I hate Pizza: Angry
+            ========================
+            Im so excited: ______
+          </pre>
+        </section>
+
+        <section>
+          <h2>Exemplars</h2>
+          <ul>
+            <li>What works:
+              <ol>
+                <li>Many Examples</li>
+                <li>Randomly Order Examples</li>
+              </ol>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p style="color:red">Bad</p>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            Trees are pretty: Happy
+            Dogs are cute: Happy
+            I hate Pizza: Angry
+            Youtube Sucks: Angry
+            ========================
+            Im so excited: ______
+          </pre>
+        </section>
+
+        <section>
+          <h2>Exemplars</h2>
+          <ul>
+            <li>What works:
+              <ol>
+                <li>Many Examples</li>
+                <li>Randomly Order Examples</li>
+                <li>Even Amount of Examples</li>
+              </ol>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p style="color:red">Bad</p>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            Trees are pretty: Happy
+            Youtube Sucks: Angry
+            Dogs are cute: Happy
+            ========================
+            Im so excited: ______
+          </pre>
+        </section>
+
+        <section>
+          <h2>Exemplars</h2>
+          <ul>
+            <li>What works:
+              <ol>
+                <li>Many Examples</li>
+                <li>Randomly Order Examples</li>
+                <li>Even Amount of Examples</li>
+                <li>Consistent Format</li>
+              </ol>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p style="color:red">Bad</p>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            Trees are pretty: Happy
+            Youtube Sucks: Angry
+            Dogs are cute === Happy
+            ========================
+            Im so excited =:= ______
+          </pre>
+        </section>
+
+        <section>
+          <h2>Exemplars</h2>
+          <ul>
+            <li>What works:
+              <ol>
+                <li>Many Examples</li>
+                <li>Randomly Order Examples</li>
+                <li>Even Amount of Examples</li>
+                <li>Consistent Format</li>
+                <li>Similar Examples to Test</li>
+              </ol>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p style="color:green">Good</p>
+          <pre style="font-size:0.85em; background:#111; padding:15px; color:#ddd;">
+            Trees are pretty: Happy
+            I hate Pizza: Angry
+            Dogs are cute: Happy
+            Youtube Sucks: Angry
+            Im not so excited: Angry
+            Im super duper excited: Happy
+            ========================
+            Im so excited: ______
+          </pre>
+        </section>
+
+        <section>
+          <h2>One-Shot Techniques</h2>
+        </section>
+
+        <section>
+          <h2>Role Prompting</h2>
+          <p>Instruct the AI to play a role, like teacher or debate opponent</p>
+        </section>
+
+        <section>
+          <h2>Style Prompting</h2>
+          <p>Instruct the AI to have a certain style: Formal, casual, sci-fi, etc</p>
+        </section>
+
+        <section>
+          <h2>... Emotion Prompting?</h2>
+          <p>Tell the AI emotionally loaded phrases: This is important to my career.</p>
+          <p class="fragment">This actually works on some benchmarks</p>
+        </section>
+
+        <section>
+          <h2>Re-read the question</h2>
+          <p>Instructing the AI to re-read the question before answering</p>
+          <p class="fragment">This also actually works on some benchmarks</p>
+        </section>
+
+
+        <section>
+          <h2>Chain of Reasoning (CoT)</h2>
+          <p>Instruct AI to explain thought process</p>
+          <p class="fragment">Lets reason through this step by step: _______</p>
+        </section>
+
+        <section>
+          <h2>Chain of Reasoning (CoT)</h2>
+          <p>Instruct AI to explain thought process</p>
+        </section>
+
+        <section>
+          <h2>Decomposition</h2>
+          <ul>
+            <li>Breaking prompts into smaller subproblems</li>
+            <li>Methods largely revolve around asking an AI to break prompt down</li>
+            <li>Shown to be effective</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Self-criticism</h2>
+          <ul>
+            <li>Feeding answers back into AI to ask for criticism</li>
+            <li>Usually involves prompting and then reprompting</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>BlindSpots</h2>
+          <ul>
+            <li>Many prompting methods involved setting up pipelines</li>
+            <li>I only included ones applicable to normal usage</li>
+          </ul>
+        </section>
+ 
+         <section>
+           <h2>Where to Find More</h2>
+           <p>The Prompt Report</p>
+           <p>https://arxiv.org/abs/2406.06608</p>
+        </section>       
+
+      </div>
+    </div>
+
+
+
+    <script src="https://unpkg.com/reveal.js/dist/reveal.js"></script>
+
+    <script>
+      Reveal.initialize({
+          hash: true,
+          slideNumber: true
+      });
+
+      document.addEventListener('keydown', function(e) {
+          if (e.key === '+' || e.key === '=') {
+              document.querySelector('.reveal').style.fontSize =
+                  (parseInt(getComputedStyle(document.querySelector('.reveal')).fontSize) + 2) + 'px';
+          }
+          if (e.key === '-') {
+              document.querySelector('.reveal').style.fontSize =
+                  (parseInt(getComputedStyle(document.querySelector('.reveal')).fontSize) - 2) + 'px';
+          }
+      });
+    </script>
+
+  </body>
+</html>
